@@ -4,6 +4,6 @@ import { Either } from '@src/shared/either';
 
 export type FindResponse = Either<NotFoundException, ISeller>;
 
-export interface UserServiceDTO {
+export interface AdminServiceDTO {
   findById: (id: number, storeId: number) => Promise<FindResponse>;
 }

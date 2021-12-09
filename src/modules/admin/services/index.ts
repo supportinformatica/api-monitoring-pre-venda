@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { left, right } from '@src/shared/either';
-import { UserRepository } from '../repositories';
-import { FindResponse, UserServiceDTO } from './dtos/user-service';
+import { AdminRepository } from '../repositories';
+import { FindResponse, AdminServiceDTO } from './dtos/admin-service';
 
 @Injectable()
-export class UserService implements UserServiceDTO {
-  constructor(private readonly repository: UserRepository) {}
+export class AdminService implements AdminServiceDTO {
+  constructor(private readonly repository: AdminRepository) {}
 
   public async findById(id: number, storeId: number): Promise<FindResponse> {
     const user = await this.repository.findById(id, storeId);
