@@ -17,7 +17,7 @@ if [ "$results" == "y" ] || [ "$results" == "Y" ]
     echo "MSSQL_USER=root" >> .env
     echo "MSSQL_PASS=root" >> .env
     echo >> .env
-    echo "MONGO_HOST=mongo_db" >> .env
+    echo "MONGO_HOST=localhost" >> .env
     echo "MONGO_PORT=27017" >> .env
     echo "MONGO_NAME=test" >> .env
     echo "MONGO_USER=root" >> .env
@@ -80,8 +80,8 @@ else
   echo "### Mongo config ###"
   echo ""
 
-  read -p 'Mongo host (mongo_db): ' INPUT
-    [ -z "$INPUT" ] && echo "MONGO_HOST=mongo_db" >> .env || echo "MONGO_HOST=$INPUT" >> .env
+  read -p 'Mongo host (localhost): ' INPUT
+    [ -z "$INPUT" ] && echo "MONGO_HOST=localhost" >> .env || echo "MONGO_HOST=$INPUT" >> .env
 
   read -p 'Mongo port (27017): ' INPUT
     [ -z "$INPUT" ] && echo "MONGO_PORT=27017" >> .env || echo "MONGO_PORT=$INPUT" >> .env

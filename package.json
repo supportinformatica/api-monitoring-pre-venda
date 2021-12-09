@@ -5,7 +5,6 @@
   "repository": "https://github.com/iago-f-s-e/api-monitoring-pre-venda.git",
   "author": "iago fagundes <iago.fagundes@outlook.com>",
   "license": "MIT",
-
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -31,6 +30,7 @@
     "@nestjs/typeorm": "^8.0.2",
     "dotenv": "^10.0.0",
     "mongoose": "^6.0.15",
+    "mssql": "^7.3.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.4.0",
     "typeorm": "^0.2.41"
