@@ -1,20 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ISellerAndInfo, Seller as ISeller } from '../interfaces/seller-and-info';
-
-class Seller implements ISeller {
-  @ApiProperty({ type: 'integer' })
-  public readonly id!: number;
-
-  @ApiProperty({ type: 'string' })
-  public readonly email!: string;
-
-  @ApiProperty({ type: 'string' })
-  public readonly name!: string;
-}
+import { ISellerAndInfo } from '../interfaces/seller-and-info';
+import { Seller } from './seller';
 
 export class SellersAndInfo implements ISellerAndInfo {
   @ApiProperty({ type: Seller })
-  public readonly seller!: ISeller;
+  public readonly seller!: Seller;
 
   @ApiProperty({ type: 'integer' })
   public readonly totalCustomers!: number;

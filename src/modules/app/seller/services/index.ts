@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ISale, ISeller } from '@src/modules/database/interfaces';
+import { left, right } from '@src/shared/either';
 import { ISellerAndInfo } from '../interfaces/seller-and-info';
 import { CustomSellerRepository } from '../repositories';
-import { SellerServiceDTO } from './dtos/seller-service';
+import { SellerServiceDTO, FindResponse } from './dtos/seller-service';
 
 @Injectable()
 export class SellerService implements SellerServiceDTO {
@@ -37,9 +38,20 @@ export class SellerService implements SellerServiceDTO {
       ranking: 0
     };
   }
+
   public async findInfo(storeId: number) {
     return this.getRanking(
       (await this.repository.findInfo(storeId)).map(seller => this.getInfo(seller))
     );
+  }
+
+  public async findById(id: number, storeId: number): Promise<FindResponse> {
+    const seller = await this.repository.findById(id, storeId);
+
+    if (!seller) {
+      return left(new NotFoundException('Seller is not found'));
+    }
+
+    return right(seller);
   }
 }
