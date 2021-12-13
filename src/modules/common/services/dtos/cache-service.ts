@@ -1,6 +1,6 @@
-import { ISellerAndInfo } from '@src/modules/app/seller/interfaces/seller-and-info';
+import { ISellerAndInfo, Seller } from '@src/modules/app/seller/interfaces/seller-and-info';
 
-export type CachePayload = ISellerAndInfo[];
+export type CachePayload = ISellerAndInfo[] | Seller;
 
 export type HasResponse = 1 | 0;
 

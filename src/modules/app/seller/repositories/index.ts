@@ -17,4 +17,13 @@ export class CustomSellerRepository implements SellerRepositoryDTO {
       .where('Seller.storeId = :storeId', { storeId })
       .getMany();
   }
+
+  public findById(id: number, storeId: number) {
+    return this.repository
+      .createQueryBuilder()
+      .select(['Seller.id', 'Seller.email', 'Seller.name'])
+      .where('Seller.id = :id', { id })
+      .andWhere('Seller.storeId = :storeId', { storeId })
+      .getOne();
+  }
 }
