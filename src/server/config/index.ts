@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { Modules } from '@src/modules';
+export { redisClient } from './redis';
 
 import * as Settings from '../settings';
 

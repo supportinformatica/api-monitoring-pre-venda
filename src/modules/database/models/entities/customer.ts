@@ -29,7 +29,7 @@ export class Customer implements ICustomer {
   @Column({ type: 'varchar', name: 'dsObservacao' })
   public readonly observation!: string;
 
-  @Column({ type: 'varchar', name: 'UF' })
+  @Column({ type: 'varchar', name: 'dsUF' })
   public readonly state!: string;
 
   @Column({ type: 'varchar', name: 'dsCidade' })
@@ -44,7 +44,7 @@ export class Customer implements ICustomer {
   @Column({ type: 'varchar', name: 'nrNumero' })
   public readonly number!: string;
 
-  @Column({ type: 'varchar', name: 'CEP' })
+  @Column({ type: 'varchar', name: 'nrCEP' })
   public readonly zipCode!: string;
 
   @Column({ type: 'varchar', name: 'dsComplemento' })

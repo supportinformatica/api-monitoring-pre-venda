@@ -22,6 +22,9 @@ if [ "$results" == "y" ] || [ "$results" == "Y" ]
     echo "MONGO_NAME=test" >> .env
     echo "MONGO_USER=root" >> .env
     echo "MONGO_PASS=root" >> .env
+    echo >> .env
+    echo "REDIS_HOST=localhost" >> .env
+    echo "REDIS_PORT=27017" >> .env
 
 else 
   echo ""
@@ -95,6 +98,19 @@ else
   read -sp 'Mongo password (root): ' INPUT
     [ -z "$INPUT" ] && echo "MONGO_PASS=root" >> .env || echo "MONGO_PASS=$INPUT" >> .env
   
+  echo >> .env
+  echo ""
+  echo "----------------------------"
+
+  echo "### Redis config ###"
+  echo ""
+
+  read -p 'Redis host (localhost): ' INPUT
+    [ -z "$INPUT" ] && echo "REDIS_HOST=localhost" >> .env || echo "REDIS_HOST=$INPUT" >> .env
+
+  read -p 'Redis port (6379): ' INPUT
+    [ -z "$INPUT" ] && echo "REDIS_PORT=6379" >> .env || echo "REDIS_PORT=$INPUT" >> .env
+
   echo >> .env
   echo ""
   echo "----------------------------"
