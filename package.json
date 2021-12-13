@@ -6,7 +6,8 @@
   "author": "iago fagundes <iago.fagundes@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "prebuild": "rimraf dist",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start -p tsconfig.json",
     "start:dev": "ts-node-dev -r tsconfig-paths/register --respawn --inspect --transpile-only --ignore-watch node_modules --no-notify src/main.ts",
@@ -33,8 +34,8 @@
     "mssql": "^7.3.0",
     "redis": "^3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.4.0",
-    "typeorm": "^0.2.41"
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.4.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",
