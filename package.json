@@ -1,16 +1,15 @@
 {
   "name": "api-monitoring-pre-venda",
   "version": "0.0.1",
-  "main": "src/index.ts",
+  "main": "src/main.ts",
   "repository": "https://github.com/iago-f-s-e/api-monitoring-pre-venda.git",
   "author": "iago fagundes <iago.fagundes@outlook.com>",
   "license": "MIT",
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "yarn build && yarn start:prod",
-    "start:prod": "node dist/index.js",
-    "start:dev": "ts-node-dev -r tsconfig-paths/register --respawn --inspect --transpile-only --ignore-watch node_modules --no-notify src/index.ts",
+    "start": "nest start -p tsconfig.json",
+    "start:dev": "ts-node-dev -r tsconfig-paths/register --respawn --inspect --transpile-only --ignore-watch node_modules --no-notify src/main.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "make": "chmod +x ./make.sh && bash make.sh",
     "prepare:husky": "husky install"
