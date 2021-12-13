@@ -1,4 +1,12 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import {
+  AfterLoad,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn
+} from 'typeorm';
 import { ISale, SaleType } from '../../interfaces/sql_server/sale';
 import { Customer } from './customer';
 import { PaymentMethod } from './payment-method';
@@ -8,56 +16,62 @@ import { Seller } from './seller';
 @Entity('PedidoVenda')
 export class Sale implements ISale {
   @PrimaryColumn({ type: 'integer' })
-  public readonly id!: number;
+  public id!: number;
 
   @Column({ type: 'integer', name: 'nrOrcamento' })
-  public readonly budgetId!: number;
+  public budgetId!: number;
 
   @Column({ type: 'integer', name: 'store_id' })
-  public readonly storeId!: number;
+  public storeId!: number;
 
   @Column({ type: 'integer', name: 'vendedor_id' })
-  public readonly sellerId!: number;
+  public sellerId!: number;
 
   @Column({ type: 'integer', name: 'cliente_id' })
-  public readonly customerId!: number;
+  public customerId!: number;
 
   @Column({ type: 'integer', name: 'formaPagamento_id' })
-  public readonly paymentId!: number;
+  public paymentId!: number;
 
   @Column({ type: 'date', name: 'dtEmissao' })
-  public readonly date!: Date;
+  public date!: Date;
 
   @Column({ type: 'money', name: 'vlTotal' })
-  public readonly total!: number;
+  public total!: number;
 
   @Column({ type: 'money', name: 'vlDesconto' })
-  public readonly discount!: number;
+  public discount!: number;
 
   @Column({ type: 'varchar', name: 'dsObservacao' })
-  public readonly observation!: string;
+  public observation!: string;
 
   @Column({ type: 'bit', name: 'faturada' })
-  public readonly concluded!: boolean;
+  public concluded!: boolean;
 
   @Column({ type: 'bit', name: 'deletada' })
-  public readonly deleted!: boolean;
+  public deleted!: boolean;
 
   @Column({ type: 'varchar', name: 'tipoPedido' })
-  public readonly saleType!: SaleType;
+  public saleType!: SaleType;
 
   @OneToMany(() => SaleProduct, products => products.sale)
-  public readonly products!: SaleProduct[];
+  public products!: SaleProduct[];
 
   @ManyToOne(() => Customer, customer => customer.sales)
   @JoinColumn({ name: 'cliente_id', referencedColumnName: 'id' })
-  public readonly customer!: Customer;
+  public customer!: Customer;
 
   @ManyToOne(() => PaymentMethod, paymentMethod => paymentMethod.sales)
   @JoinColumn({ name: 'formaPagamento_id', referencedColumnName: 'id' })
-  public readonly paymentMethod!: PaymentMethod;
+  public paymentMethod!: PaymentMethod;
 
   @ManyToOne(() => Seller, seller => seller.sales)
   @JoinColumn({ name: 'vendedor_id', referencedColumnName: 'id' })
-  public readonly seller!: Seller;
+  public seller!: Seller;
+
+  @AfterLoad()
+  protected formatValues(): void {
+    this.total = parseFloat((this.total * 100).toFixed(2));
+    this.discount = parseFloat((this.discount * 100).toFixed(2));
+  }
 }

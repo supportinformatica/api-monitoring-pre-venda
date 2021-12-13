@@ -14,6 +14,15 @@ export class SellerService implements SellerServiceDTO {
     return sales.map(sale => sale.total).reduce((prev, curr) => prev + curr);
   }
 
+  private getRanking(sellers: ISellerAndInfo[]): ISellerAndInfo[] {
+    return sellers
+      .sort((prev, next) => next.totalValue - prev.totalValue)
+      .map((seller, index) => ({
+        ...seller,
+        ranking: index + 1
+      }));
+  }
+
   private getInfo({ sales, customers, id, email, name }: ISeller): ISellerAndInfo {
     const totalValue = this.getTotalValue(sales);
     const totalSales = sales.length;
@@ -24,10 +33,13 @@ export class SellerService implements SellerServiceDTO {
       seller,
       totalCustomers,
       totalSales,
-      totalValue
+      totalValue,
+      ranking: 0
     };
   }
   public async findInfo(storeId: number) {
-    return (await this.repository.findInfo(storeId)).map(seller => this.getInfo(seller));
+    return this.getRanking(
+      (await this.repository.findInfo(storeId)).map(seller => this.getInfo(seller))
+    );
   }
 }
