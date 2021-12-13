@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TokenService } from './services/token-service';
 
 import * as Settings from '@src/server/settings';
+import { CacheService } from './services/cache-service';
 @Module({
   imports: [
     JwtModule.register({
@@ -10,7 +11,7 @@ import * as Settings from '@src/server/settings';
       signOptions: { expiresIn: Settings.AUTH_KEY_TOKEN_EXPIRES }
     })
   ],
-  exports: [TokenService],
-  providers: [TokenService]
+  exports: [TokenService, CacheService],
+  providers: [TokenService, CacheService]
 })
 export class CommonModule {}

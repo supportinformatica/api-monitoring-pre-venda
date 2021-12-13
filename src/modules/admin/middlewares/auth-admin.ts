@@ -37,6 +37,7 @@ export class AuthAdmin implements NestMiddleware {
     const admin = adminOrError.value;
 
     request.admin = admin;
+    request.storeId = storeId;
 
     next();
   }

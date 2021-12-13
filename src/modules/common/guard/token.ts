@@ -10,3 +10,9 @@ export const Authorized = createParamDecorator((_, { args }: AuthorizedDecorator
 
   return request.admin;
 });
+
+export const StoreId = createParamDecorator((_, { args }: AuthorizedDecorator) => {
+  const [request] = args;
+
+  return request.storeId;
+});
