@@ -16,6 +16,12 @@ export class Product implements IProduct {
   @Column({ type: 'bit', name: 'Ativo' })
   public readonly isActive!: boolean;
 
+  @Column({ type: 'varchar', name: 'url_imagem' })
+  public readonly image!: string;
+
+  @Column({ type: 'varchar', name: 'url_default' })
+  public readonly defaultImage!: string;
+
   @OneToMany(() => SaleProduct, sales => sales.product)
   public readonly sales!: SaleProduct[];
 }

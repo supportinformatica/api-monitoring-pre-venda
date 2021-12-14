@@ -1,21 +1,43 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
-import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { BadRequestException, Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags
+} from '@nestjs/swagger';
 import { StoreId } from '@src/modules/common/guard/token';
 import { CacheService } from '@src/modules/common/services/cache-service';
 import { SellerService } from '../services';
-import { SellersAndInfo } from '../entities/sellers-and-info';
-import { Seller } from '../entities/seller';
+import { SellersAndInfo } from '../schemas/sellers-and-info';
+import { Seller } from '../schemas/seller';
+import { SaleService } from '../../sale/services';
+import { SaleInfo } from '../../sale/schemas/sale-info';
+import { PerDaySchema, PeriodSchema } from '../schemas/period';
+import { SalePerDaySchema } from '../../sale/schemas/sale-per-day';
+import { getKeyName } from '@src/shared/key-name';
 
 @Controller('sellers')
 @ApiTags('vendedores')
 @ApiBearerAuth('admin')
 export class SellerController {
-  constructor(private readonly service: SellerService, private readonly cache: CacheService) {}
+  constructor(
+    private readonly service: SellerService,
+    private readonly cache: CacheService,
+    private readonly saleService: SaleService
+  ) {}
 
   @Get('')
   @ApiOkResponse({ isArray: true, type: SellersAndInfo })
   public async findInfo(@StoreId() storeId: number) {
-    const keyName = `pre_venda://@${storeId}:sellers/info`;
+    const keyName = getKeyName({
+      identifiers: {
+        storeId
+      },
+      layer: 'controller',
+      method: 'SELLER_INFO',
+      module: 'seller'
+    });
 
     if (await this.cache.has(keyName)) {
       return this.cache.get(keyName);
@@ -39,7 +61,14 @@ export class SellerController {
   @Get('top-five')
   @ApiOkResponse({ isArray: true, type: SellersAndInfo })
   public async findTopFive(@StoreId() storeId: number) {
-    const keyName = `pre_venda://@${storeId}:sellers/info/top-five`;
+    const keyName = getKeyName({
+      identifiers: {
+        storeId
+      },
+      layer: 'controller',
+      method: 'SELLER_TOP_FIVE',
+      module: 'seller'
+    });
 
     if (await this.cache.has(keyName)) {
       return this.cache.get(keyName);
@@ -65,5 +94,57 @@ export class SellerController {
     if (sellerOrError.isLeft()) throw sellerOrError.value;
 
     return sellerOrError.value;
+  }
+
+  @Get(':id/sales-summary')
+  @ApiOkResponse({ type: SaleInfo })
+  public findInfoSales(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() query: PeriodSchema,
+    @StoreId() storeId: number
+  ) {
+    return this.saleService.findInfoBySellerId(id, storeId, query?.from, query?.to);
+  }
+
+  @Get(':id/sales-summary-per-day')
+  @ApiOkResponse({ type: SalePerDaySchema })
+  @ApiBadRequestResponse({ description: '"Invalid day format" or "Out range day"' })
+  public async findInfoSalesPerDay(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() query: PerDaySchema,
+    @StoreId() storeId: number
+  ) {
+    const days = parseInt(query.days);
+
+    if (Number.isNaN(days)) throw new BadRequestException('Invalid day format');
+
+    if (days < 1 || days > 90) throw new BadRequestException('Out range day');
+
+    const keyName = getKeyName({
+      identifiers: {
+        storeId,
+        sellerId: id
+      },
+      layer: 'controller',
+      method: 'SELLER_INFO_SALES_PER_DAY',
+      module: 'seller',
+      periods: {
+        days
+      }
+    });
+
+    if (await this.cache.has(keyName)) {
+      return this.cache.get(keyName);
+    }
+
+    const salesPerDay = await this.saleService.findInfoBySellerIdPerDay(id, storeId, days);
+
+    this.cache.set(keyName, salesPerDay).then(res => {
+      if (res === 'OK') return console.log('Caching successfully');
+
+      return console.log('Caching error');
+    });
+
+    return salesPerDay;
   }
 }
