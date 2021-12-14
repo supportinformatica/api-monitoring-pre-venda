@@ -1,7 +1,12 @@
+import { SaleBySeller } from '@src/modules/app/sale/interfaces/sale-by-seller';
 import { SalePerDay } from '@src/modules/app/sale/interfaces/sale-per-day';
 import { ISellerAndInfo, Seller } from '@src/modules/app/seller/interfaces/seller-and-info';
 
-export type CachePayload = ISellerAndInfo[] | Seller | SalePerDay;
+type SaleCachePayload = SalePerDay | SaleBySeller[];
+
+type SellerCachePayload = Seller | ISellerAndInfo[];
+
+export type CachePayload = SaleCachePayload | SellerCachePayload;
 
 export type HasResponse = 1 | 0;
 

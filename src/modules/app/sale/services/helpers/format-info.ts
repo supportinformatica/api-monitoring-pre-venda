@@ -1,4 +1,5 @@
 import { ISale } from '@src/modules/database/interfaces';
+import { formatDate } from '@src/shared/format-date';
 import { SaleAndInfo } from '../../interfaces/sale-and-info';
 
 function getMaxValue(values: number[]): number {
@@ -30,13 +31,6 @@ function getMediaSales(totalSales: number, diffDays: number): number {
 
   return Number((totalSales / diffDays).toFixed(2));
 }
-
-export function formatDate(date: Date): string {
-  const [usDate] = date.toISOString().split('T');
-
-  return usDate.split('-').reverse().join('/');
-}
-
 export function formatInfo(sales: ISale[]): SaleAndInfo {
   if (!sales.length) {
     return {

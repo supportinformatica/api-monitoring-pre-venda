@@ -3,13 +3,14 @@ import { CustomSaleRepository } from '../repositories';
 import { SaleServiceDTO } from './dtos/sale-service';
 import { formatInfo } from './helpers/format-info';
 import { formatSalePerDay } from './helpers/format-info-per-day';
+import { formatAllBySeller } from './helpers/format-all-by-seller';
 
 @Injectable()
 export class SaleService implements SaleServiceDTO {
   constructor(private readonly repository: CustomSaleRepository) {}
 
-  public findAllBySellerId(sellerId: number, storeId: number) {
-    return this.repository.findAllBySellerId(sellerId, storeId);
+  public async findAllBySellerId(sellerId: number, storeId: number) {
+    return formatAllBySeller(await this.repository.findAllBySellerId(sellerId, storeId));
   }
 
   public async findInfoBySellerId(sellerId: number, storeId: number, from?: string, to?: string) {

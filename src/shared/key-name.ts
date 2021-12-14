@@ -2,7 +2,11 @@ import { QueryPeriod } from '@src/modules/app/sale/repositories/dtos/sale-reposi
 
 type MethodsRepository = 'INFO_BY_SELLER_ID' | 'ALL_BY_SELLER_ID';
 
-type MethodsController = 'SELLER_INFO_SALES_PER_DAY' | 'SELLER_TOP_FIVE' | 'SELLER_INFO';
+type MethodsSellerController = 'SELLER_INFO_SALES_PER_DAY' | 'SELLER_TOP_FIVE' | 'SELLER_INFO';
+
+type MethodsSaleController = 'SALE_ALL_BY_SELLER';
+
+type MethodsController = MethodsSellerController | MethodsSaleController;
 
 type Controller = 'controller';
 

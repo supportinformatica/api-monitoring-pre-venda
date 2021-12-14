@@ -10,13 +10,6 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
   constructor(@InjectRepository(Sale) private readonly repository: Repository<Sale>) {}
 
   public findAllBySellerId(sellerId: number, storeId: number) {
-    const keyName = getKeyName({
-      identifiers: { storeId, sellerId },
-      layer: 'repository',
-      method: 'ALL_BY_SELLER_ID',
-      module: 'sale'
-    });
-
     return this.repository
       .createQueryBuilder()
       .select([
@@ -31,8 +24,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .innerJoin('Sale.customer', 'customer')
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
-      .orderBy('Sale.date', 'ASC')
-      .cache(keyName)
+      .orderBy('Sale.date', 'DESC')
       .getMany();
   }
 
@@ -60,7 +52,6 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .where('Sale.id = :id', { id })
       .andWhere('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
-      .orderBy('Sale.date', 'ASC')
       .getOne();
   }
 
