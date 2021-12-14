@@ -1,13 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomSaleRepository } from '../repositories';
-import { SaleServiceDTO } from './dtos/sale-service';
+import { SaleServiceDTO, FindResponse } from './dtos/sale-service';
 import { formatInfo } from './helpers/format-info';
 import { formatSalePerDay } from './helpers/format-info-per-day';
 import { formatAllBySeller } from './helpers/format-all-by-seller';
+import { formatById } from './helpers/format-by-id';
+import { left, right } from '@src/shared/either';
 
 @Injectable()
 export class SaleService implements SaleServiceDTO {
   constructor(private readonly repository: CustomSaleRepository) {}
+
+  public async findById(id: number, storeId: number): Promise<FindResponse> {
+    const sale = await this.repository.findId(id, storeId);
+
+    if (!sale) return left(new NotFoundException('Sale is not found'));
+
+    return right(formatById(sale));
+  }
 
   public async findAllBySellerId(sellerId: number, storeId: number) {
     return formatAllBySeller(await this.repository.findAllBySellerId(sellerId, storeId));

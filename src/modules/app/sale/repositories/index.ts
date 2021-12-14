@@ -28,7 +28,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .getMany();
   }
 
-  public findId(id: number, sellerId: number, storeId: number) {
+  public findId(id: number, storeId: number) {
     return this.repository
       .createQueryBuilder()
       .select([
@@ -40,6 +40,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'products.quantity',
         'products.grossValue',
         'product.id',
+        'product.name',
         'product.image',
         'product.defaultImage',
         'customer.id',
@@ -50,7 +51,6 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .innerJoin('Sale.customer', 'customer')
       .innerJoin('Sale.paymentMethod', 'paymentMethod')
       .where('Sale.id = :id', { id })
-      .andWhere('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .getOne();
   }

@@ -6,7 +6,7 @@ import {
   ICustomerSchema
 } from '../interfaces/sale-by-seller';
 
-class SaleCustomerSchema implements ICustomerSchema {
+export class SaleCustomerSchema implements ICustomerSchema {
   @ApiProperty({ type: 'number' })
   public readonly id!: number;
 
