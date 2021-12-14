@@ -1,39 +1,81 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Sale } from '@src/modules/database/models';
+import { getKeyName } from '@src/shared/key-name';
 import { Repository } from 'typeorm';
-import { SeleRepositoryDTO, QueryPeriod } from './dtos/sale-repository';
+import { SeleRepositoryDTO } from './dtos/sale-repository';
+import { getQueryPeriod } from './helpers/get-query-period';
 @Injectable()
 export class CustomSaleRepository implements SeleRepositoryDTO {
   constructor(@InjectRepository(Sale) private readonly repository: Repository<Sale>) {}
 
-  private getQueryPeriod(setFrom?: string, setTo?: string): QueryPeriod {
-    const query = 'Sale.date BETWEEN :from AND :to';
+  public findAllBySellerId(sellerId: number, storeId: number) {
+    const keyName = getKeyName({
+      identifiers: { storeId, sellerId },
+      layer: 'repository',
+      method: 'ALL_BY_SELLER_ID',
+      module: 'sale'
+    });
 
-    let from = new Date('2021-06-01').toISOString();
-    let to = new Date().toISOString();
-
-    if (setFrom && setTo) {
-      (from = setFrom), (to = setTo);
-    }
-
-    const params = { from, to };
-    return { query, params };
+    return this.repository
+      .createQueryBuilder()
+      .select([
+        'Sale.id',
+        'Sale.total',
+        'Sale.date',
+        'Sale.saleType',
+        'Sale.saleStatus',
+        'customer.id',
+        'customer.name'
+      ])
+      .innerJoin('Sale.customer', 'customer')
+      .where('Sale.sellerId = :sellerId', { sellerId })
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .orderBy('Sale.date', 'ASC')
+      .cache(keyName)
+      .getMany();
   }
 
-  private getKeyName(sellerId: number, storeId: number, { params }: QueryPeriod) {
-    const app = 'pre_venda://';
-    const period = `@from:${params.from}@to:${params.to}`;
-    const identifier = `@${storeId}:sales`;
-    const description = `/info/by-seller:${sellerId}`;
-
-    return `${app}${period}${identifier}${description}`;
+  public findId(id: number, sellerId: number, storeId: number) {
+    return this.repository
+      .createQueryBuilder()
+      .select([
+        'Sale.total',
+        'Sale.discount',
+        'Sale.date',
+        'Sale.observation',
+        'paymentMethod.name',
+        'products.quantity',
+        'products.grossValue',
+        'product.id',
+        'product.image',
+        'product.defaultImage',
+        'customer.id',
+        'customer.name'
+      ])
+      .innerJoin('Sale.products', 'products')
+      .innerJoin('products.product', 'product')
+      .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.paymentMethod', 'paymentMethod')
+      .where('Sale.id = :id', { id })
+      .andWhere('Sale.sellerId = :sellerId', { sellerId })
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .orderBy('Sale.date', 'ASC')
+      .getOne();
   }
 
   public findInfoBySellerId(sellerId: number, storeId: number, from?: string, to?: string) {
-    const queryPeriod = this.getQueryPeriod(from, to);
+    const queryPeriod = getQueryPeriod(from, to);
 
-    const keyName = this.getKeyName(sellerId, storeId, queryPeriod);
+    const keyName = getKeyName({
+      identifiers: { storeId, sellerId },
+      layer: 'repository',
+      method: 'INFO_BY_SELLER_ID',
+      module: 'sale',
+      periods: {
+        fromTo: queryPeriod
+      }
+    });
 
     return this.repository
       .createQueryBuilder()

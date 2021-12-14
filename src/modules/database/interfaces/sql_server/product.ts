@@ -6,5 +6,8 @@ export interface IProduct {
   name: string;
   isActive: boolean;
 
+  image: string;
+  defaultImage: string;
+
   sales: ISaleProduct[];
 }

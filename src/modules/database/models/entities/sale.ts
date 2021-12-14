@@ -7,7 +7,7 @@ import {
   OneToMany,
   PrimaryColumn
 } from 'typeorm';
-import { ISale, SaleType } from '../../interfaces/sql_server/sale';
+import { ISale, SaleType, SaleStatus } from '../../interfaces/sql_server/sale';
 import { Customer } from './customer';
 import { PaymentMethod } from './payment-method';
 import { SaleProduct } from './sale-product';
@@ -53,6 +53,9 @@ export class Sale implements ISale {
 
   @Column({ type: 'varchar', name: 'tipoPedido' })
   public saleType!: SaleType;
+
+  @Column({ type: 'integer', name: 'situacaoApp' })
+  public saleStatus!: SaleStatus;
 
   @OneToMany(() => SaleProduct, products => products.sale)
   public products!: SaleProduct[];

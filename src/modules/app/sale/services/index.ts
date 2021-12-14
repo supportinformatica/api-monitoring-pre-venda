@@ -8,6 +8,10 @@ import { formatSalePerDay } from './helpers/format-info-per-day';
 export class SaleService implements SaleServiceDTO {
   constructor(private readonly repository: CustomSaleRepository) {}
 
+  public findAllBySellerId(sellerId: number, storeId: number) {
+    return this.repository.findAllBySellerId(sellerId, storeId);
+  }
+
   public async findInfoBySellerId(sellerId: number, storeId: number, from?: string, to?: string) {
     return formatInfo(await this.repository.findInfoBySellerId(sellerId, storeId, from, to));
   }

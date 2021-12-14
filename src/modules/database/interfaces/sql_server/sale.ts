@@ -5,6 +5,8 @@ import { ISeller } from './seller';
 
 export type SaleType = 'P' | 'O';
 
+export type SaleStatus = 1 | 2 | 3;
+
 export interface ISale {
   id: number;
   budgetId: number;
@@ -15,6 +17,7 @@ export interface ISale {
   date: Date;
   total: number;
   discount: number;
+  saleStatus: SaleStatus;
   observation: string;
   concluded: boolean;
   deleted: boolean;

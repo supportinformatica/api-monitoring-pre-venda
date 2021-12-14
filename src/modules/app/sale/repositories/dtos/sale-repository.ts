@@ -13,5 +13,11 @@ export interface QueryPeriod {
 }
 
 export interface SeleRepositoryDTO {
-  findInfoBySellerId: (sellerId: number, storeId: number) => Promise<ISale[]>;
+  findAllBySellerId: (sellerId: number, storeId: number) => Promise<ISale[]>;
+  findInfoBySellerId: (
+    sellerId: number,
+    storeId: number,
+    from?: string,
+    to?: string
+  ) => Promise<ISale[]>;
 }

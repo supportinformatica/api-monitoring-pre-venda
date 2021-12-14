@@ -15,6 +15,7 @@ import { SaleService } from '../../sale/services';
 import { SaleInfo } from '../../sale/schemas/sale-info';
 import { PerDaySchema, PeriodSchema } from '../schemas/period';
 import { SalePerDaySchema } from '../../sale/schemas/sale-per-day';
+import { getKeyName } from '@src/shared/key-name';
 
 @Controller('sellers')
 @ApiTags('vendedores')
@@ -29,7 +30,14 @@ export class SellerController {
   @Get('')
   @ApiOkResponse({ isArray: true, type: SellersAndInfo })
   public async findInfo(@StoreId() storeId: number) {
-    const keyName = `pre_venda://@${storeId}:sellers/info`;
+    const keyName = getKeyName({
+      identifiers: {
+        storeId
+      },
+      layer: 'controller',
+      method: 'SELLER_INFO',
+      module: 'seller'
+    });
 
     if (await this.cache.has(keyName)) {
       return this.cache.get(keyName);
@@ -53,7 +61,14 @@ export class SellerController {
   @Get('top-five')
   @ApiOkResponse({ isArray: true, type: SellersAndInfo })
   public async findTopFive(@StoreId() storeId: number) {
-    const keyName = `pre_venda://@${storeId}:sellers/info/top-five`;
+    const keyName = getKeyName({
+      identifiers: {
+        storeId
+      },
+      layer: 'controller',
+      method: 'SELLER_TOP_FIVE',
+      module: 'seller'
+    });
 
     if (await this.cache.has(keyName)) {
       return this.cache.get(keyName);
@@ -105,7 +120,18 @@ export class SellerController {
 
     if (days < 1 || days > 90) throw new BadRequestException('Out range day');
 
-    const keyName = `pre_venda://@days:${days}@${storeId}:${id}:sellers/info/sales/per-day`;
+    const keyName = getKeyName({
+      identifiers: {
+        storeId,
+        sellerId: id
+      },
+      layer: 'controller',
+      method: 'SELLER_INFO_SALES_PER_DAY',
+      module: 'seller',
+      periods: {
+        days
+      }
+    });
 
     if (await this.cache.has(keyName)) {
       return this.cache.get(keyName);
