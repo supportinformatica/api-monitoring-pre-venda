@@ -1,4 +1,5 @@
 import { SaleAndInfo } from '../../interfaces/sale-and-info';
+import { SalePerDay } from '../../interfaces/sale-per-day';
 
 export interface SaleServiceDTO {
   findInfoBySellerId: (
@@ -7,4 +8,10 @@ export interface SaleServiceDTO {
     from?: string,
     to?: string
   ) => Promise<SaleAndInfo>;
+
+  findInfoBySellerIdPerDay: (
+    sellerId: number,
+    storeId: number,
+    days: number
+  ) => Promise<SalePerDay>;
 }
