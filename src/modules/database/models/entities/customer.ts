@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { DocumentType, ICustomer } from '../../interfaces/sql_server/customer';
 import { Sale } from './sale';
 import { SellerCustomer } from './seller-customer';
@@ -61,4 +61,11 @@ export class Customer implements ICustomer {
 
   @OneToMany(() => Sale, sales => sales.customer)
   public readonly sales!: Sale[];
+
+  @AfterLoad()
+  protected formatDocument(): void {
+    const document = this.document?.trim();
+
+    Object.assign(this, { document });
+  }
 }

@@ -4,8 +4,9 @@ export const swaggerConfig = new DocumentBuilder()
   .setTitle('Monitoring Pre-Venda')
   .setDescription('Api de monitoramento e gerenciamento para o pré-venda')
   .setVersion('0.0.1')
-  .addTag('vendedores')
+  .addTag('clientes')
   .addTag('vendas')
+  .addTag('vendedores')
   .addBearerAuth(
     {
       in: 'header',
