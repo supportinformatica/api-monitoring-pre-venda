@@ -8,7 +8,7 @@ import { SaleService } from './services';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Sale]), CommonModule],
-  exports: [SaleService],
+  exports: [SaleService, CustomSaleRepository],
   providers: [CustomSaleRepository, SaleService],
   controllers: [SaleController]
 })

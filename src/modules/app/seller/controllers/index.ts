@@ -16,6 +16,9 @@ import { SaleInfo } from '../../sale/schemas/sale-info';
 import { PerDaySchema, PeriodSchema } from '../schemas/period';
 import { SalePerDaySchema } from '../../sale/schemas/sale-per-day';
 import { getKeyName } from '@src/shared/key-name';
+import { GraphicService } from '../../graphic/services';
+import { PeriodOptionsSchema } from '../../graphic/schemas/period-options-schema';
+import { getTypePeriod } from './helpers/get-type-period';
 
 @Controller('sellers')
 @ApiTags('vendedores')
@@ -24,7 +27,8 @@ export class SellerController {
   constructor(
     private readonly service: SellerService,
     private readonly cache: CacheService,
-    private readonly saleService: SaleService
+    private readonly saleService: SaleService,
+    private readonly graphicService: GraphicService
   ) {}
 
   @Get('')
@@ -104,6 +108,21 @@ export class SellerController {
     @StoreId() storeId: number
   ) {
     return this.saleService.findInfoBySellerId(id, storeId, query?.from, query?.to);
+  }
+
+  @Get(':id/sales-graphic')
+  public findSaleGraphic(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() query: PeriodOptionsSchema,
+    @StoreId() storeId: number
+  ) {
+    const quantity = parseInt(query.quantity);
+
+    if (Number.isNaN(quantity)) throw new BadRequestException('Invalid quantity format');
+
+    const type = getTypePeriod(query.type);
+
+    return this.graphicService.saleBySeller(id, storeId, { quantity, type });
   }
 
   @Get(':id/sales-summary-per-day')

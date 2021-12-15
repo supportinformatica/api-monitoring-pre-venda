@@ -21,4 +21,11 @@ export interface SeleRepositoryDTO {
     from?: string,
     to?: string
   ) => Promise<ISale[]>;
+
+  findForGraphicBySellerId: (
+    sellerId: number,
+    storeId: number,
+    from?: string,
+    to?: string
+  ) => Promise<ISale[]>;
 }

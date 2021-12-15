@@ -78,4 +78,39 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .cache(keyName)
       .getMany();
   }
+
+  public findForGraphicBySellerId(sellerId: number, storeId: number, from?: string, to?: string) {
+    const queryPeriod = getQueryPeriod(from, to);
+
+    console.log({ queryPeriod });
+
+    const keyName = getKeyName({
+      identifiers: { storeId, sellerId },
+      layer: 'repository',
+      method: 'FOR_GRAPHIC_BY_SELLER_ID',
+      module: 'sale',
+      periods: {
+        fromTo: queryPeriod
+      }
+    });
+
+    return this.repository
+      .createQueryBuilder()
+      .select([
+        'Sale.date',
+        'Sale.total',
+        'Sale.discount',
+        'products.id',
+        'customer.id',
+        'customer.name'
+      ])
+      .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.products', 'products')
+      .where('Sale.sellerId = :sellerId', { sellerId })
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere(queryPeriod.query, queryPeriod.params)
+      .orderBy('Sale.date', 'ASC')
+      .cache(keyName)
+      .getMany();
+  }
 }

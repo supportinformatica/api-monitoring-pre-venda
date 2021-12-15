@@ -1,6 +1,6 @@
 import { QueryPeriod } from '@src/modules/app/sale/repositories/dtos/sale-repository';
 
-type MethodsRepository = 'INFO_BY_SELLER_ID' | 'ALL_BY_SELLER_ID';
+type MethodsRepository = 'INFO_BY_SELLER_ID' | 'ALL_BY_SELLER_ID' | 'FOR_GRAPHIC_BY_SELLER_ID';
 
 type MethodsSellerController = 'SELLER_INFO_SALES_PER_DAY' | 'SELLER_TOP_FIVE' | 'SELLER_INFO';
 
@@ -36,6 +36,15 @@ interface KeyNameOptions {
   periods?: Periods;
 }
 
+function getFromTo({ fromTo }: Periods): string {
+  if (!fromTo) return '';
+
+  const [from] = fromTo.params.from.split('T');
+  const [to] = fromTo.params.to.split('T');
+
+  return `@from:${from}@to:${to}`;
+}
+
 export function getKeyName(options: KeyNameOptions) {
   const { identifiers, periods, layer, method, module } = options;
 
@@ -45,9 +54,7 @@ export function getKeyName(options: KeyNameOptions) {
 
   const seller = identifiers.sellerId ? `@seller:${identifiers.sellerId}` : '';
 
-  const fromTo = periods?.fromTo?.params
-    ? `@from:${periods.fromTo.params.from}@to:${periods.fromTo.params.to}`
-    : '';
+  const fromTo = periods ? getFromTo(periods) : '';
 
   const days = periods?.days ? `@days:${periods.days}` : '';
 

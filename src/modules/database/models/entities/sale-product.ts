@@ -6,37 +6,39 @@ import { Sale } from './sale';
 @Entity('ItemPedidoVenda')
 export class SaleProduct implements ISaleProduct {
   @PrimaryColumn({ type: 'integer' })
-  public id!: number;
+  public readonly id!: number;
 
   @Column({ type: 'integer', name: 'store_id' })
-  public storeId!: number;
+  public readonly storeId!: number;
 
   @Column({ type: 'integer', name: 'pedidoVenda_id' })
-  public saleId!: number;
+  public readonly saleId!: number;
 
   @Column({ type: 'integer', name: 'produto_id' })
-  public productId!: number;
+  public readonly productId!: number;
 
   @Column({ type: 'float', name: 'qtdVendido' })
-  public quantity!: number;
+  public readonly quantity!: number;
 
   @Column({ type: 'money', name: 'vlUnitarioBruto' })
-  public grossValue!: number;
+  public readonly grossValue!: number;
 
   @Column({ type: 'money', name: 'vlUnitarioLiquido' })
-  public netValue!: number;
+  public readonly netValue!: number;
 
   @ManyToOne(() => Product, product => product.sales)
   @JoinColumn({ name: 'produto_id', referencedColumnName: 'id' })
-  public product!: Product;
+  public readonly product!: Product;
 
   @ManyToOne(() => Sale, sale => sale.products)
   @JoinColumn({ name: 'pedidoVenda_id', referencedColumnName: 'id' })
-  public sale!: Sale;
+  public readonly sale!: Sale;
 
   @AfterLoad()
   protected formatValues(): void {
-    this.grossValue = parseFloat((this.grossValue * 100).toFixed(2));
-    this.netValue = parseFloat((this.netValue * 100).toFixed(2));
+    const grossValue = this.grossValue ? parseFloat((this.grossValue * 100).toFixed(2)) : undefined;
+    const netValue = this.netValue ? parseFloat((this.netValue * 100).toFixed(2)) : undefined;
+
+    Object.assign(this, { grossValue, netValue });
   }
 }
