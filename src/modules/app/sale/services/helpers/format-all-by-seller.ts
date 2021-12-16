@@ -1,5 +1,5 @@
+import { formatDate } from '@src/modules/common/helpers';
 import { ISale, SaleStatus, SaleType } from '@src/modules/database/interfaces';
-import { formatDate } from '@src/shared/format-date';
 import { SaleBySeller, SaleStatusSchema, SaleTypeSchema } from '../../interfaces/sale-by-seller';
 
 function getStatus(status: SaleStatus): SaleStatusSchema {

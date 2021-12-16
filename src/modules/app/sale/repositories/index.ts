@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Sale } from '@src/modules/database/models';
 import { getKeyName } from '@src/shared/key-name';
 import { Repository } from 'typeorm';
-import { SeleRepositoryDTO } from './dtos/sale-repository';
+import { FindForGraphicResponse, SeleRepositoryDTO } from './dtos/sale-repository';
 import { getQueryPeriod } from './helpers/get-query-period';
 @Injectable()
 export class CustomSaleRepository implements SeleRepositoryDTO {
@@ -77,5 +77,34 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .orderBy('Sale.date', 'ASC')
       .cache(keyName)
       .getMany();
+  }
+
+  public async findForGraphicBySellerId(
+    sellerId: number,
+    storeId: number,
+    from: string,
+    to: string
+  ): Promise<FindForGraphicResponse> {
+    const queryPeriod = getQueryPeriod(from, to);
+
+    const sales = await this.repository
+      .createQueryBuilder()
+      .select([
+        'Sale.date',
+        'Sale.total',
+        'Sale.discount',
+        'products.id',
+        'customer.id',
+        'customer.name'
+      ])
+      .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.products', 'products')
+      .where('Sale.sellerId = :sellerId', { sellerId })
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere(queryPeriod.query, queryPeriod.params)
+      .orderBy('Sale.date', 'ASC')
+      .getMany();
+
+    return { sales, period: { from, to } };
   }
 }
