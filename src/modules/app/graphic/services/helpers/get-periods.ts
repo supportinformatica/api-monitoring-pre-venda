@@ -10,8 +10,8 @@ function getPerMonth(weeks: number) {
     const start = 30 * (index + 1) - 1;
     const end = 30 * index;
 
-    const from = new Date(new Date().setDate(new Date().getUTCDate() - start)).toLocaleDateString(); //.toISOString();
-    const to = new Date(new Date().setDate(new Date().getUTCDate() - end)).toLocaleDateString(); //.toISOString();
+    const from = new Date(new Date().setDate(new Date().getUTCDate() - start)).toISOString();
+    const to = new Date(new Date().setDate(new Date().getUTCDate() - end)).toISOString();
 
     return { from, to };
   });
@@ -22,8 +22,8 @@ function getPerWeek(weeks: number) {
     const start = 8 * (index + 1) - 1;
     const end = 8 * index;
 
-    const from = new Date(new Date().setDate(new Date().getUTCDate() - start)).toLocaleDateString(); //.toISOString();
-    const to = new Date(new Date().setDate(new Date().getUTCDate() - end)).toLocaleDateString(); //.toISOString();
+    const from = new Date(new Date().setDate(new Date().getUTCDate() - start)).toISOString();
+    const to = new Date(new Date().setDate(new Date().getUTCDate() - end)).toISOString();
 
     return { from, to };
   });

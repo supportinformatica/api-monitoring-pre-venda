@@ -111,7 +111,7 @@ export class SellerController {
   }
 
   @Get(':id/sales-graphic')
-  public findSaleGraphic(
+  public async findSaleGraphic(
     @Param('id', ParseIntPipe) id: number,
     @Query() query: PeriodOptionsSchema,
     @StoreId() storeId: number
@@ -122,7 +122,26 @@ export class SellerController {
 
     const type = getTypePeriod(query.type);
 
-    return this.graphicService.saleBySeller(id, storeId, { quantity, type });
+    const keyName = getKeyName({
+      identifiers: { storeId, sellerId: id },
+      layer: 'controller',
+      method: 'SELLER_SALE_GRAPHIC',
+      module: 'seller',
+      periods: {
+        type,
+        quantity
+      }
+    });
+
+    if (await this.cache.has(keyName)) {
+      return this.cache.get(keyName);
+    }
+
+    const saleGraphic = await this.graphicService.saleBySeller(id, storeId, { quantity, type });
+
+    this.cache.set(keyName, saleGraphic);
+
+    return saleGraphic;
   }
 
   @Get(':id/sales-summary-per-day')

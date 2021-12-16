@@ -1,31 +1,28 @@
-interface Period {
-  start: string;
-  end: string;
-}
-
-interface TopFiveCustomers {
+export interface TopFiveCustomers {
   id: number;
   name: string;
+  quantitySales: number;
 }
 
-interface Sale {
+export interface Sale {
   productsQuantity: number;
   value: number;
 }
 
-interface Data {
+export interface Data {
   sales: Sale[];
   date: string;
   quantity: number;
+  total: number;
   decreasing: boolean;
 }
-
 export interface SaleGraphicBySeller {
   data: Data[];
-  period: Period;
   totalSales: number;
   mediaSales: number;
   totalValue: number;
   mediaValue: number;
+  maxValue: number;
+  maxQuantity: number;
   topFiveCustomers: TopFiveCustomers[];
 }

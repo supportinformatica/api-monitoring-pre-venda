@@ -1,41 +1,12 @@
 import { ISale } from '@src/modules/database/interfaces';
-import { formatDate } from '@src/shared/format-date';
 import { SaleAndInfo } from '../../interfaces/sale-and-info';
 
-function getMaxValue(values: number[]): number {
-  return values.reduce((max, curr) => Math.max(max, curr));
-}
-
-function getTotalValue(values: number[]): number {
-  return values.reduce((acc, curr) => acc + curr);
-}
-
-function getMediaValue(values: number[], total: number): number {
-  return Number((total / values.length).toFixed(2));
-}
-
-function getBeginningPeriod(sales: ISale[]): Date {
-  return new Date(sales[0].date);
-}
-
-function getEndPeriod(sales: ISale[]): Date {
-  return new Date(sales[sales.length - 1].date);
-}
-
-function getDiffDays(beginningPeriod: Date, getEndPeriod: Date): number {
-  return (getEndPeriod.valueOf() - beginningPeriod.valueOf()) / 24 / 60 / 60 / 1000;
-}
-
-function getMediaSales(totalSales: number, diffDays: number): number {
-  if (!diffDays) return totalSales;
-
-  return Number((totalSales / diffDays).toFixed(2));
-}
+import * as Helpers from '@src/modules/common/helpers';
 export function formatInfo(sales: ISale[]): SaleAndInfo {
   if (!sales.length) {
     return {
-      beginningPeriod: formatDate(new Date('2021-06-01')),
-      endPeriod: formatDate(new Date()),
+      beginningPeriod: Helpers.formatDate(new Date('2021-06-01')),
+      endPeriod: Helpers.formatDate(new Date()),
       maxValue: 0,
       mediaSales: 0,
       totalSales: 0,
@@ -46,25 +17,25 @@ export function formatInfo(sales: ISale[]): SaleAndInfo {
 
   const values = sales.map(sale => sale.total);
 
-  const maxValue = getMaxValue(values);
+  const maxValue = Helpers.getMax(values);
 
-  const totalValue = getTotalValue(values);
+  const totalValue = Helpers.getSum(values);
 
-  const mediaValue = getMediaValue(values, totalValue);
+  const mediaValue = Helpers.getMedia(values.length, totalValue);
 
-  const beginningPeriod = getBeginningPeriod(sales);
+  const beginningPeriod = Helpers.getBeginningPeriod(sales);
 
-  const endPeriod = getEndPeriod(sales);
+  const endPeriod = Helpers.getEndPeriod(sales);
 
-  const diffDays = getDiffDays(beginningPeriod, endPeriod);
+  const diffDays = Helpers.getDiffDays(beginningPeriod, endPeriod);
 
   const totalSales = sales.length;
 
-  const mediaSales = getMediaSales(totalSales, diffDays);
+  const mediaSales = Helpers.getMedia(totalSales, diffDays);
 
   return {
-    beginningPeriod: formatDate(beginningPeriod),
-    endPeriod: formatDate(endPeriod),
+    beginningPeriod: Helpers.formatDate(beginningPeriod),
+    endPeriod: Helpers.formatDate(endPeriod),
     maxValue,
     mediaSales,
     totalSales,

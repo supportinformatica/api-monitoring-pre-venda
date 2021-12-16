@@ -2,7 +2,11 @@ import { QueryPeriod } from '@src/modules/app/sale/repositories/dtos/sale-reposi
 
 type MethodsRepository = 'INFO_BY_SELLER_ID' | 'ALL_BY_SELLER_ID' | 'FOR_GRAPHIC_BY_SELLER_ID';
 
-type MethodsSellerController = 'SELLER_INFO_SALES_PER_DAY' | 'SELLER_TOP_FIVE' | 'SELLER_INFO';
+type MethodsSellerController =
+  | 'SELLER_INFO_SALES_PER_DAY'
+  | 'SELLER_TOP_FIVE'
+  | 'SELLER_INFO'
+  | 'SELLER_SALE_GRAPHIC';
 
 type MethodsSaleController = 'SALE_ALL_BY_SELLER';
 
@@ -26,6 +30,8 @@ interface Identifiers {
 interface Periods {
   days?: number;
   fromTo?: Pick<QueryPeriod, 'params'>;
+  type?: 'DAY' | 'WEEK' | 'MONTH';
+  quantity?: number;
 }
 
 interface KeyNameOptions {
@@ -58,5 +64,9 @@ export function getKeyName(options: KeyNameOptions) {
 
   const days = periods?.days ? `@days:${periods.days}` : '';
 
-  return `${app}${fromTo}${days}${store}${seller}${path}`;
+  const type = periods?.type ? `@type:${periods.type}` : '';
+
+  const quantity = periods?.quantity ? `@quantity:${periods.quantity}` : '';
+
+  return `${app}${fromTo}${days}${type}${quantity}${store}${seller}${path}`;
 }
