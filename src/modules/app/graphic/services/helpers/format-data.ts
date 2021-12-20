@@ -3,7 +3,8 @@ import {
   Sale,
   Data,
   TopFiveCustomers,
-  SaleGraphicBySeller
+  SaleGraphicBySeller,
+  DataTopCustomers
 } from '../../interfaces/sale-graphic-by-seller';
 
 import * as Helpers from '@src/modules/common/helpers';
@@ -44,7 +45,8 @@ function getTopFiveCustomers(payload: FindForGraphicResponse[]): TopFiveCustomer
     if (!customerFound) {
       const topCustomer: TopFiveCustomers = {
         ...customer,
-        quantitySales: 1
+        quantitySales: 1,
+        ranking: 0
       };
 
       topFiveCustomers.push(topCustomer);
@@ -64,13 +66,20 @@ function getTopFiveCustomers(payload: FindForGraphicResponse[]): TopFiveCustomer
     topFiveCustomers = customersFiltered;
   }
 
-  return topFiveCustomers.sort((prev, next) => next.quantitySales - prev.quantitySales).slice(0, 5);
+  return topFiveCustomers
+    .sort((prev, next) => next.quantitySales - prev.quantitySales)
+    .slice(0, 5)
+    .map((value, index) => ({
+      ...value,
+      ranking: index + 1
+    }));
 }
 
-function formatSale({ products, total }: ISale): Sale {
+function formatSale({ products, total, customer }: ISale): Sale {
   return {
     productsQuantity: products.length,
-    value: total
+    value: total,
+    customerId: customer.id
   };
 }
 
@@ -85,12 +94,15 @@ function formatData(payload: FindForGraphicResponse): Data {
 
   const total = Helpers.getSum(values);
 
+  const isDefault = !sales.length;
+
   return {
     date,
     decreasing: true,
     quantity,
     sales,
-    total
+    total,
+    isDefault
   };
 }
 
@@ -107,7 +119,30 @@ function fillEmptyData(payload: Data[], dates: string[]): Data[] {
       decreasing: true,
       quantity: 0,
       sales: [],
-      total: 0
+      total: 0,
+      isDefault: true
+    };
+  });
+}
+
+function formatDataTopCustomers(topFive: TopFiveCustomers[], data: Data[]): DataTopCustomers[] {
+  return topFive.map(customer => {
+    return {
+      id: customer.id,
+      ranking: customer.ranking,
+      data: data.map(payload => {
+        if (payload.isDefault)
+          return {
+            date: payload.date,
+            quantity: payload.quantity
+          };
+
+        const sales = payload.sales.filter(sale => sale.customerId === customer.id);
+        const quantity = sales.length;
+        const date = payload.date;
+
+        return { quantity, date };
+      })
     };
   });
 }
@@ -135,8 +170,11 @@ export function formatSaleGraphic(
   const mediaSales = Helpers.getMedia(totalSales, quantityPeriod);
   const mediaValue = Helpers.getMedia(totalValue, quantityPeriod);
 
+  const dataTopCustomers = formatDataTopCustomers(topFiveCustomers, data);
+
   return {
     data,
+    dataTopCustomers,
     maxQuantity,
     maxValue,
     mediaSales,

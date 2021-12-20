@@ -51,13 +51,7 @@ export class SellerController {
       prev.seller.name.localeCompare(next.seller.name)
     );
 
-    this.cache.set(keyName, infoSellers).then(res => {
-      if (res === 'OK') return console.log('Caching successfully');
-
-      // TODO: export on log
-
-      return console.log('Caching error');
-    });
+    this.cache.set(keyName, infoSellers);
 
     return infoSellers;
   }
@@ -80,11 +74,7 @@ export class SellerController {
 
     const infoTopFive = (await this.service.findInfo(storeId)).slice(0, 5);
 
-    this.cache.set(keyName, infoTopFive).then(res => {
-      if (res === 'OK') return console.log('Caching successfully');
-
-      return console.log('Caching error');
-    });
+    this.cache.set(keyName, infoTopFive);
 
     return infoTopFive;
   }
@@ -177,11 +167,7 @@ export class SellerController {
 
     const salesPerDay = await this.saleService.findInfoBySellerIdPerDay(id, storeId, days);
 
-    this.cache.set(keyName, salesPerDay).then(res => {
-      if (res === 'OK') return console.log('Caching successfully');
-
-      return console.log('Caching error');
-    });
+    this.cache.set(keyName, salesPerDay);
 
     return salesPerDay;
   }
