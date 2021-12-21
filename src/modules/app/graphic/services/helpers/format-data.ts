@@ -13,16 +13,19 @@ import { FindForGraphicResponse } from '@src/modules/app/sale/repositories/dtos/
 function getDecreasing(data: Data[]): Data[] {
   let last: Data = data[0];
 
-  return data.slice(1).map(value => {
-    const results = {
-      ...value,
-      decreasing: value.quantity < last.quantity || !value.quantity
-    };
+  return [
+    last,
+    ...data.slice(1).map(value => {
+      const results = {
+        ...value,
+        decreasing: value.quantity < last.quantity || !value.quantity
+      };
 
-    last = value;
+      last = value;
 
-    return results;
-  });
+      return results;
+    })
+  ];
 }
 
 function getTopFiveCustomers(payload: FindForGraphicResponse[]): TopFiveCustomers[] {

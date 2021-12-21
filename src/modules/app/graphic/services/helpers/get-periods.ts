@@ -39,7 +39,7 @@ function getPerDay(days: number): Period[] {
 
 export function getPeriods(options: PeriodOptions): Period[] {
   const { type } = options;
-  const quantity = options.quantity + 1;
+  const quantity = options.quantity;
 
   if (type === 'MONTH') return getPerMonth(quantity).reverse();
 
