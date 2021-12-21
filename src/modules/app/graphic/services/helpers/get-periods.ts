@@ -37,7 +37,10 @@ function getPerDay(days: number): Period[] {
   });
 }
 
-export function getPeriods({ quantity, type }: PeriodOptions): Period[] {
+export function getPeriods(options: PeriodOptions): Period[] {
+  const { type } = options;
+  const quantity = options.quantity + 1;
+
   if (type === 'MONTH') return getPerMonth(quantity).reverse();
 
   if (type === 'WEEK') return getPerWeek(quantity).reverse();

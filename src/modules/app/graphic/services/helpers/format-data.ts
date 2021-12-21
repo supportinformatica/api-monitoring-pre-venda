@@ -106,25 +106,6 @@ function formatData(payload: FindForGraphicResponse): Data {
   };
 }
 
-function fillEmptyData(payload: Data[], dates: string[]): Data[] {
-  return dates.map(value => {
-    const date = Helpers.formatDateDayAndMonth(new Date(value));
-
-    const data = payload.find(data => data.date === date);
-
-    if (data) return data;
-
-    return {
-      date,
-      decreasing: true,
-      quantity: 0,
-      sales: [],
-      total: 0,
-      isDefault: true
-    };
-  });
-}
-
 function formatDataTopCustomers(topFive: TopFiveCustomers[], data: Data[]): DataTopCustomers[] {
   return topFive.map(customer => {
     return {
@@ -153,10 +134,7 @@ export function formatSaleGraphic(
 ): SaleGraphicBySeller {
   const topFiveCustomers = getTopFiveCustomers(payload);
 
-  const data = fillEmptyData(
-    getDecreasing(payload.map(data => formatData(data))),
-    payload.map(({ period }) => period.to)
-  );
+  const data = getDecreasing(payload.map(data => formatData(data)));
 
   const values = data.map(({ total }) => total);
   const quantities = data.map(({ quantity }) => quantity);
