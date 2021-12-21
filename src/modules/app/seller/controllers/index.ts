@@ -19,6 +19,7 @@ import { getKeyName } from '@src/shared/key-name';
 import { GraphicService } from '../../graphic/services';
 import { PeriodOptionsSchema } from '../../graphic/schemas/period-options-schema';
 import { getTypePeriod } from './helpers/get-type-period';
+import { SaleGraphicBySellerSchema } from '../../graphic/schemas/sale-graphic-by-seller';
 
 @Controller('sellers')
 @ApiTags('vendedores')
@@ -101,6 +102,7 @@ export class SellerController {
   }
 
   @Get(':id/sales-graphic')
+  @ApiOkResponse({ type: SaleGraphicBySellerSchema })
   public async findSaleGraphic(
     @Param('id', ParseIntPipe) id: number,
     @Query() query: PeriodOptionsSchema,
