@@ -1,5 +1,5 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { ISellerCustomer } from '../../interfaces/sql_server/seller-customer';
+import { ISellerCustomer } from '../../../interfaces/sql_server/app/seller-customer';
 import { Customer } from './customer';
 import { Seller } from './seller';
 

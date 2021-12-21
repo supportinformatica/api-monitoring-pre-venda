@@ -1,5 +1,5 @@
 import { AfterLoad, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { DocumentType, ICustomer } from '../../interfaces/sql_server/customer';
+import { DocumentType, ICustomer } from '../../../interfaces/sql_server/app/customer';
 import { Sale } from './sale';
 import { SellerCustomer } from './seller-customer';
 

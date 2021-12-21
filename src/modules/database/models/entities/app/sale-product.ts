@@ -1,5 +1,5 @@
 import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { ISaleProduct } from '../../interfaces/sql_server/sale-product';
+import { ISaleProduct } from '../../../interfaces/sql_server/app/sale-product';
 import { Product } from './product';
 import { Sale } from './sale';
 

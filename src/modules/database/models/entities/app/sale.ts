@@ -7,7 +7,7 @@ import {
   OneToMany,
   PrimaryColumn
 } from 'typeorm';
-import { ISale, SaleType, SaleStatus } from '../../interfaces/sql_server/sale';
+import { ISale, SaleType, SaleStatus } from '../../../interfaces/sql_server/app/sale';
 import { Customer } from './customer';
 import { PaymentMethod } from './payment-method';
 import { SaleProduct } from './sale-product';

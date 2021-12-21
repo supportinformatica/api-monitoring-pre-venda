@@ -1,6 +1,6 @@
 dist
 node_modules
 coverage
-
+.vscode
 .env
 ormconfig.js
