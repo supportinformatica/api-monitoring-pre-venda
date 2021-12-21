@@ -10,5 +10,5 @@ export class LastUpdate implements ILastUpdate {
   public readonly storeId!: number;
 
   @Column({ type: 'nvarchar', name: 'name' })
-  public readonly date!: Date;
+  public readonly date!: string;
 }

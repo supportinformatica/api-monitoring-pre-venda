@@ -15,6 +15,7 @@ export interface ISale {
   customerId: number;
   paymentId: number;
   date: Date;
+  dateSync: string;
   total: number;
   discount: number;
   saleStatus: SaleStatus;

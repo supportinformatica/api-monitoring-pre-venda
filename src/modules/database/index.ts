@@ -3,8 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { sqlServerAppConnection } from './config/mssql-app-config';
 import { sqlServerAdminConnection } from './config/mssql-admin-config';
 
-// TODO: connect to mongo
-
 @Module({
   imports: [
     TypeOrmModule.forRoot(sqlServerAppConnection),

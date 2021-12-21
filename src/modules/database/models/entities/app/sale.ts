@@ -36,6 +36,9 @@ export class Sale implements ISale {
   @Column({ type: 'date', name: 'dtEmissao' })
   public readonly date!: Date;
 
+  @Column({ type: 'datetime', name: 'dtSyncApp' })
+  public readonly dateSync!: string;
+
   @Column({ type: 'money', name: 'vlTotal' })
   public readonly total!: number;
 

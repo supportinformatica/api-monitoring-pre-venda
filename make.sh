@@ -10,6 +10,7 @@ if [ "$results" == "y" ] || [ "$results" == "Y" ]
     echo "PORT=8080" >> .env
     echo >> .env
     echo "### Auth config ###" >> .env
+    echo "AUTH_KEY_SMS=secret" >> .env
     echo "AUTH_KEY_SECURITY=secret" >> .env
     echo "AUTH_KEY_TOKEN_EXPIRES=300000" >> .env
     echo >> .env
@@ -65,6 +66,9 @@ else
   echo ""
 
   echo "### Auth config ###" >> .env
+
+  read -p 'Auth key sms (secret): ' INPUT
+    [ -z "$INPUT" ] && echo "AUTH_KEY_SMS=secret" >> .env || echo "AUTH_KEY_SMS=$INPUT" >> .env
 
   read -p 'Auth key security (secret): ' INPUT
     [ -z "$INPUT" ] && echo "AUTH_KEY_SECURITY=secret" >> .env || echo "AUTH_KEY_SECURITY=$INPUT" >> .env
