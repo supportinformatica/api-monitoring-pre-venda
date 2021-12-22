@@ -8,6 +8,7 @@ if [ "$results" == "y" ] || [ "$results" == "Y" ]
     echo "NODE_ENV=development" >> .env
     echo "HOST=0.0.0.0" >> .env
     echo "PORT=8080" >> .env
+    echo "DEFAULT_PHONE_NUMBER=99999999999" >> .env
     echo >> .env
     echo "### Auth config ###" >> .env
     echo "AUTH_KEY_SMS=secret" >> .env
@@ -57,6 +58,9 @@ else
 
   read -p 'Server port (8080): ' INPUT
     [ -z "$INPUT" ] && echo "PORT=8080" >> .env || echo "PORT=$INPUT" >> .env
+
+  read -p 'Server default phone number (99999999999): ' INPUT
+    [ -z "$INPUT" ] && echo "DEFAULT_PHONE_NUMBER=99999999999" >> .env || echo "DEFAULT_PHONE_NUMBER=$INPUT" >> .env
 
   echo >> .env
   echo ""

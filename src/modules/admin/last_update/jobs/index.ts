@@ -6,7 +6,7 @@ import { LastUpdateService } from '../services';
 export class LastUpdateJobs {
   constructor(private lastUpdateService: LastUpdateService) {}
 
-  @Cron('00 30 8-16 * * *')
+  @Cron('00 30 8-16 * * 1-5')
   public handleCron() {
     this.lastUpdateService.verifyLastUpdate();
   }

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { SmsServiceDTO, SendWarn, SmsPayload } from './dtos/sms-service';
 
-import { AUTH_KEY_SMS, DEFAULT_NUMBER } from '@src/server/settings';
+import { AUTH_KEY_SMS, DEFAULT_PHONE_NUMBER } from '@src/server/settings';
 
 @Injectable()
 export class SmsService implements SmsServiceDTO {
@@ -11,7 +11,7 @@ export class SmsService implements SmsServiceDTO {
   public sendWarnSync(payload: SendWarn[]) {
     const data: SmsPayload[] = payload.map(({ name }) => ({
       key: AUTH_KEY_SMS,
-      number: DEFAULT_NUMBER,
+      number: DEFAULT_PHONE_NUMBER,
       type: 9,
       msg: `Sync da loja "${name}" precisa de atenção`
     }));
@@ -28,7 +28,7 @@ export class SmsService implements SmsServiceDTO {
 
       return {
         key: AUTH_KEY_SMS,
-        number: DEFAULT_NUMBER,
+        number: DEFAULT_PHONE_NUMBER,
         type: 9,
         msg: message
       };

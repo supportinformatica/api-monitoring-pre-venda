@@ -38,6 +38,7 @@ export class LastUpdateService implements LastUpdateServiceDTO {
 
     if (!sendWarns.length) return;
 
+    console.log('#### sending warning message (SALES) ####');
     this.smsService.sendWarnSales(sendWarns as SendWarn[]);
   }
 
@@ -62,6 +63,7 @@ export class LastUpdateService implements LastUpdateServiceDTO {
 
     if (!sendWarns.length) return;
 
+    console.log('#### sending warning message (SYNC) ####');
     this.smsService.sendWarnSync(sendWarns as SendWarn[]);
   }
 
