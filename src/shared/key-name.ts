@@ -10,13 +10,18 @@ type MethodsSellerController =
 
 type MethodsSaleController = 'SALE_ALL_BY_SELLER';
 
-type MethodsController = MethodsSellerController | MethodsSaleController;
+type MethodsCustomerController = 'CUSTOMER_TOP_FIVE';
+
+type MethodsController =
+  | MethodsSellerController
+  | MethodsSaleController
+  | MethodsCustomerController;
 
 type Controller = 'controller';
 
 type Repository = 'repository';
 
-type Module = 'sale' | 'seller';
+type Module = 'sale' | 'seller' | 'customer';
 
 type Layer = Controller | Repository;
 
