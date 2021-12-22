@@ -1,8 +1,11 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { StoreId } from '@src/modules/common/guard/token';
+import { PeriodSchema } from '@src/modules/common/schemas/period';
 import { CacheService } from '@src/modules/common/services/cache-service';
 import { getKeyName } from '@src/shared/key-name';
+import { SaleInfoByCustomerSchema } from '../../sale/schemas/sale-info';
+import { SaleService } from '../../sale/services';
 import { CustomerAndInfoSchema } from '../schemas/customer-and-info';
 import { CustomerByIdSchema } from '../schemas/customer-by-id';
 import { CustomerService } from '../services';
@@ -11,7 +14,11 @@ import { CustomerService } from '../services';
 @ApiTags('clientes')
 @ApiBearerAuth('admin')
 export class CustomerController {
-  constructor(private readonly service: CustomerService, private readonly cache: CacheService) {}
+  constructor(
+    private readonly service: CustomerService,
+    private readonly cache: CacheService,
+    private readonly saleService: SaleService
+  ) {}
 
   @Get('')
   @ApiOkResponse({ isArray: true, type: CustomerAndInfoSchema })
@@ -70,5 +77,15 @@ export class CustomerController {
     if (customerOrError.isLeft()) throw customerOrError.value;
 
     return customerOrError.value;
+  }
+
+  @Get(':id/purchases-summary')
+  @ApiOkResponse({ type: SaleInfoByCustomerSchema })
+  public findInfoSales(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() query: PeriodSchema,
+    @StoreId() storeId: number
+  ) {
+    return this.saleService.findInfoByCustomerId(id, storeId, query?.from, query?.to);
   }
 }
