@@ -1,6 +1,12 @@
 import { QueryPeriod } from '@src/modules/app/sale/repositories/dtos/sale-repository';
 
-type MethodsRepository = 'INFO_BY_SELLER_ID' | 'ALL_BY_SELLER_ID' | 'FOR_GRAPHIC_BY_SELLER_ID';
+type MethodsSalesRepository =
+  | 'INFO_BY_SELLER_ID'
+  | 'INFO_BY_CUSTOMER_ID'
+  | 'ALL_BY_SELLER_ID'
+  | 'FOR_GRAPHIC_BY_SELLER_ID';
+
+type MethodsRepository = MethodsSalesRepository;
 
 type MethodsSellerController =
   | 'SELLER_INFO_SALES_PER_DAY'
@@ -29,6 +35,7 @@ type Method = MethodsController | MethodsRepository;
 
 interface Identifiers {
   storeId: number;
+  customerId?: number;
   sellerId?: number;
 }
 
@@ -65,6 +72,8 @@ export function getKeyName(options: KeyNameOptions) {
 
   const seller = identifiers.sellerId ? `@seller:${identifiers.sellerId}` : '';
 
+  const customer = identifiers.customerId ? `@customer:${identifiers.customerId}` : '';
+
   const fromTo = periods ? getFromTo(periods) : '';
 
   const days = periods?.days ? `@days:${periods.days}` : '';
@@ -73,5 +82,5 @@ export function getKeyName(options: KeyNameOptions) {
 
   const quantity = periods?.quantity ? `@quantity:${periods.quantity}` : '';
 
-  return `${app}${fromTo}${days}${type}${quantity}${store}${seller}${path}`;
+  return `${app}${fromTo}${days}${type}${quantity}${store}${seller}${customer}${path}`;
 }

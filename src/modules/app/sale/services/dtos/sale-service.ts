@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Either } from '@src/shared/either';
-import { SaleAndInfo } from '../../interfaces/sale-and-info';
+import { SaleAndInfoByCustomer, SaleAndInfoBySeller } from '../../interfaces/sale-and-info';
 import { SaleById } from '../../interfaces/sale-by-id';
 import { SaleBySeller } from '../../interfaces/sale-by-seller';
 import { SalePerDay } from '../../interfaces/sale-per-day';
@@ -17,7 +17,14 @@ export interface SaleServiceDTO {
     storeId: number,
     from?: string,
     to?: string
-  ) => Promise<SaleAndInfo>;
+  ) => Promise<SaleAndInfoBySeller>;
+
+  findInfoByCustomerId: (
+    sellerId: number,
+    storeId: number,
+    from?: string,
+    to?: string
+  ) => Promise<SaleAndInfoByCustomer>;
 
   findInfoBySellerIdPerDay: (
     sellerId: number,

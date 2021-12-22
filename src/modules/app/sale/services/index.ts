@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomSaleRepository } from '../repositories';
 import { SaleServiceDTO, FindResponse } from './dtos/sale-service';
-import { formatInfo } from './helpers/format-info';
+import { formatInfoBySeller } from './helpers/format-info-by-seller';
+import { formatInfoByCustomer } from './helpers/format-info-by-customer';
 import { formatSalePerDay } from './helpers/format-info-per-day';
 import { formatAllBySeller } from './helpers/format-all-by-seller';
 import { formatById } from './helpers/format-by-id';
@@ -24,7 +25,24 @@ export class SaleService implements SaleServiceDTO {
   }
 
   public async findInfoBySellerId(sellerId: number, storeId: number, from?: string, to?: string) {
-    return formatInfo(await this.repository.findInfoBySellerId(sellerId, storeId, from, to));
+    return formatInfoBySeller(
+      await this.repository.findInfoBySellerId(sellerId, storeId, from, to),
+      from,
+      to
+    );
+  }
+
+  public async findInfoByCustomerId(
+    customerId: number,
+    storeId: number,
+    from?: string,
+    to?: string
+  ) {
+    return formatInfoByCustomer(
+      await this.repository.findInfoByCustomerId(customerId, storeId, from, to),
+      from,
+      to
+    );
   }
 
   public async findInfoBySellerIdPerDay(sellerId: number, storeId: number, days = 7) {

@@ -1,4 +1,4 @@
-export interface SaleAndInfo {
+export interface SaleAndInfoBySeller {
   beginningPeriod: string;
   endPeriod: string;
   totalSales: number;
@@ -6,4 +6,10 @@ export interface SaleAndInfo {
   totalValue: number;
   mediaValue: number;
   maxValue: number;
+}
+
+export interface SaleAndInfoByCustomer
+  extends Omit<SaleAndInfoBySeller, 'totalSales' | 'mediaSales'> {
+  totalPurchases: number;
+  mediaPurchases: number;
 }
