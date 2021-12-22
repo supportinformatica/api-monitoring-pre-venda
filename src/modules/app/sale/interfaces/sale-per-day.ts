@@ -1,9 +1,14 @@
-export interface SalePerDayData {
+export interface PerDayData {
   date: string;
   quantity: number;
 }
 
 export interface SalePerDay {
-  sales: SalePerDayData[];
+  sales: PerDayData[];
+  max: number;
+}
+
+export interface PurchasesPerDay {
+  purchases: PerDayData[];
   max: number;
 }

@@ -3,7 +3,7 @@ import { CustomSaleRepository } from '../repositories';
 import { SaleServiceDTO, FindResponse } from './dtos/sale-service';
 import { formatInfoBySeller } from './helpers/format-info-by-seller';
 import { formatInfoByCustomer } from './helpers/format-info-by-customer';
-import { formatSalePerDay } from './helpers/format-info-per-day';
+import { formatSalePerDay, formatPurchasesPerDay } from './helpers/format-info-per-day';
 import { formatAllBySeller } from './helpers/format-all-by-seller';
 import { formatById } from './helpers/format-by-id';
 import { left, right } from '@src/shared/either';
@@ -53,5 +53,15 @@ export class SaleService implements SaleServiceDTO {
     });
 
     return formatSalePerDay(await Promise.all(promises));
+  }
+
+  public async findInfoByCustomerIdPerDay(customerId: number, storeId: number, days = 7) {
+    const promises = new Array(days).fill('').map((_, index) => {
+      const perDay = new Date(new Date().setDate(new Date().getUTCDate() - index)).toISOString();
+
+      return this.repository.findInfoBySellerId(customerId, storeId, perDay, perDay);
+    });
+
+    return formatPurchasesPerDay(await Promise.all(promises));
   }
 }
