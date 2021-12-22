@@ -8,7 +8,7 @@ export class LastUpdateJobs {
 
   @Cron('00 */30 8-16 * * 1-5')
   public handleCron() {
-    console.log(`#### VERIFY LAST UPDATE (${new Date()})####`);
+    console.log(`#### VERIFY LAST UPDATE (${new Date()}) ####`);
     this.lastUpdateService.verifyLastUpdate();
   }
 }
