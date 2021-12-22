@@ -8,6 +8,18 @@ import { CustomerRepositoryDTO } from './dtos/customer-repository';
 export class CustomCustomerRepository implements CustomerRepositoryDTO {
   constructor(@InjectRepository(Customer) private readonly repository: Repository<Customer>) {}
 
+  public findInfo(storeId: number) {
+    return (
+      this.repository
+        .createQueryBuilder()
+        .select(['Customer.id', 'Customer.name', 'sales.total'])
+        // .leftJoin('Customer.sales', 'sales', 'sales.concluded = :concluded', { concluded: true })
+        .leftJoin('Customer.sales', 'sales')
+        .where('Customer.storeId = :storeId', { storeId })
+        .getMany()
+    );
+  }
+
   public findById(id: number, storeId: number) {
     return this.repository
       .createQueryBuilder()

@@ -1,3 +1,4 @@
+import { CustomerAndInfo } from '@src/modules/app/customer/interfaces/customer-and-info';
 import { SaleGraphicBySeller } from '@src/modules/app/graphic/interfaces/sale-graphic-by-seller';
 import { SaleBySeller } from '@src/modules/app/sale/interfaces/sale-by-seller';
 import { SalePerDay } from '@src/modules/app/sale/interfaces/sale-per-day';
@@ -7,7 +8,9 @@ type SaleCachePayload = SalePerDay | SaleBySeller[];
 
 type SellerCachePayload = Seller | ISellerAndInfo[] | SaleGraphicBySeller;
 
-export type CachePayload = SaleCachePayload | SellerCachePayload;
+type CustomerCachePayload = CustomerAndInfo[];
+
+export type CachePayload = SaleCachePayload | SellerCachePayload | CustomerCachePayload;
 
 export type HasResponse = 1 | 0;
 
