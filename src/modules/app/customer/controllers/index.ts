@@ -13,6 +13,31 @@ import { CustomerService } from '../services';
 export class CustomerController {
   constructor(private readonly service: CustomerService, private readonly cache: CacheService) {}
 
+  @Get('')
+  @ApiOkResponse({ isArray: true, type: CustomerAndInfoSchema })
+  public async findInfo(@StoreId() storeId: number) {
+    const keyName = getKeyName({
+      identifiers: {
+        storeId
+      },
+      layer: 'controller',
+      method: 'CUSTOMER_INFO',
+      module: 'customer'
+    });
+
+    if (await this.cache.has(keyName)) {
+      return this.cache.get(keyName);
+    }
+
+    const infoSellers = (await this.service.findInfo(storeId)).sort((prev, next) =>
+      prev.customer.name.localeCompare(next.customer.name)
+    );
+
+    this.cache.set(keyName, infoSellers);
+
+    return infoSellers;
+  }
+
   @Get('top-five')
   @ApiOkResponse({ isArray: true, type: CustomerAndInfoSchema })
   public async findTopFive(@StoreId() storeId: number) {

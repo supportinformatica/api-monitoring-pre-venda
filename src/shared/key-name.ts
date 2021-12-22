@@ -10,7 +10,7 @@ type MethodsSellerController =
 
 type MethodsSaleController = 'SALE_ALL_BY_SELLER';
 
-type MethodsCustomerController = 'CUSTOMER_TOP_FIVE';
+type MethodsCustomerController = 'CUSTOMER_TOP_FIVE' | 'CUSTOMER_INFO';
 
 type MethodsController =
   | MethodsSellerController
