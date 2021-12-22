@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { sqlServerConnection } from './config/mssql-config';
-
-// TODO: connect to mongo
+import { sqlServerAppConnection } from './config/mssql-app-config';
+import { sqlServerAdminConnection } from './config/mssql-admin-config';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(sqlServerConnection)]
+  imports: [
+    TypeOrmModule.forRoot(sqlServerAppConnection),
+    TypeOrmModule.forRoot(sqlServerAdminConnection)
+  ]
 })
 export class DatabaseModule {}

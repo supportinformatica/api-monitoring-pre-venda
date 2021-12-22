@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { IPaymentMethod } from '../../interfaces/sql_server/payment-method';
+import { IPaymentMethod } from '../../../interfaces/sql_server/app/payment-method';
 import { Sale } from './sale';
 
 @Entity('FormaPagamento')

@@ -5,17 +5,18 @@ import { resolve } from 'path';
 
 const dir = resolve(__dirname, '..');
 
-const PATH_ENTITIES = `${dir}/models/entities/*.{ts,js}`;
+const PATH_ENTITIES = `${dir}/models/entities/admin/*.{ts,js}`;
 
 const tls = Settings.IS_PRODUCTION ? { rejectUnauthorized: false } : undefined;
 
-export const sqlServerConnection: ConnectionOptions = {
+export const sqlServerAdminConnection: ConnectionOptions = {
   type: 'mssql',
-  host: Settings.MSSQL_HOST,
-  port: Settings.MSSQL_PORT,
-  database: Settings.MSSQL_NAME,
-  username: Settings.MSSQL_USER,
-  password: Settings.MSSQL_PASS,
+  name: Settings.MSSQL_ADMIN_NAME,
+  host: Settings.MSSQL_ADMIN_HOST,
+  port: Settings.MSSQL_ADMIN_PORT,
+  database: Settings.MSSQL_ADMIN_NAME,
+  username: Settings.MSSQL_ADMIN_USER,
+  password: Settings.MSSQL_ADMIN_PASS,
   entities: [PATH_ENTITIES],
   cache: {
     type: 'redis',

@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { ISeller } from '../../interfaces/sql_server/seller';
+import { ISeller } from '../../../interfaces/sql_server/app/seller';
 import { Sale } from './sale';
 import { SellerCustomer } from './seller-customer';
 

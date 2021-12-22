@@ -7,7 +7,7 @@ import {
   OneToMany,
   PrimaryColumn
 } from 'typeorm';
-import { ISale, SaleType, SaleStatus } from '../../interfaces/sql_server/sale';
+import { ISale, SaleType, SaleStatus } from '../../../interfaces/sql_server/app/sale';
 import { Customer } from './customer';
 import { PaymentMethod } from './payment-method';
 import { SaleProduct } from './sale-product';
@@ -35,6 +35,9 @@ export class Sale implements ISale {
 
   @Column({ type: 'date', name: 'dtEmissao' })
   public readonly date!: Date;
+
+  @Column({ type: 'datetime', name: 'dtSyncApp' })
+  public readonly dateSync!: string;
 
   @Column({ type: 'money', name: 'vlTotal' })
   public readonly total!: number;

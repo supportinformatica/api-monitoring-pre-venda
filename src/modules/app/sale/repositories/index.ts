@@ -9,6 +9,14 @@ import { getQueryPeriod } from './helpers/get-query-period';
 export class CustomSaleRepository implements SeleRepositoryDTO {
   constructor(@InjectRepository(Sale) private readonly repository: Repository<Sale>) {}
 
+  public findNullSales() {
+    return this.repository
+      .createQueryBuilder()
+      .select(['Sale.id', 'Sale.storeId', 'Sale.dateSync'])
+      .where('Sale.budgetId IS NULL')
+      .getMany();
+  }
+
   public findAllBySellerId(sellerId: number, storeId: number) {
     return this.repository
       .createQueryBuilder()

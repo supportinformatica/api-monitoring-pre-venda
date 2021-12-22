@@ -1,18 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommonModule } from '../common';
-import { Seller } from '../database/models';
-import { AuthAdmin } from './middlewares/auth-admin';
-import { AdminRepository } from './repositories';
-import { AdminService } from './services';
+import { Module } from '@nestjs/common';
+
+import { AuthAdminModule } from './auth';
+import { LastUpdateModule } from './last_update';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Seller]), CommonModule],
-  exports: [AuthAdmin],
-  providers: [AdminRepository, AdminService, AuthAdmin]
+  imports: [AuthAdminModule, LastUpdateModule]
 })
-export class AdminModule implements NestModule {
-  public configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthAdmin).forRoutes('*');
-  }
-}
+export class AdminModule {}

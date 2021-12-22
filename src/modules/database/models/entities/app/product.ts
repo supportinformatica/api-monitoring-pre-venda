@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { IProduct } from '../../interfaces/sql_server/product';
+import { IProduct } from '../../../interfaces/sql_server/app/product';
 import { SaleProduct } from './sale-product';
 
 @Entity('Produto')
