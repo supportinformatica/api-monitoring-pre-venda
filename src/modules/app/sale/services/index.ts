@@ -59,7 +59,7 @@ export class SaleService implements SaleServiceDTO {
     const promises = new Array(days).fill('').map((_, index) => {
       const perDay = new Date(new Date().setDate(new Date().getUTCDate() - index)).toISOString();
 
-      return this.repository.findInfoBySellerId(customerId, storeId, perDay, perDay);
+      return this.repository.findInfoByCustomerId(customerId, storeId, perDay, perDay);
     });
 
     return formatPurchasesPerDay(await Promise.all(promises));
