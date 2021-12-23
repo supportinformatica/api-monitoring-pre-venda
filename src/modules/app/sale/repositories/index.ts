@@ -5,6 +5,7 @@ import { getKeyName } from '@src/shared/key-name';
 import { Repository } from 'typeorm';
 import { FindForGraphicResponse, SeleRepositoryDTO } from './dtos/sale-repository';
 import { getQueryPeriod } from './helpers/get-query-period';
+
 @Injectable()
 export class CustomSaleRepository implements SeleRepositoryDTO {
   constructor(@InjectRepository(Sale) private readonly repository: Repository<Sale>) {}
@@ -13,6 +14,14 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
     return this.repository
       .createQueryBuilder()
       .select(['Sale.id', 'Sale.storeId', 'Sale.dateSync'])
+      .where('Sale.budgetId IS NULL')
+      .getMany();
+  }
+
+  public teste() {
+    return this.repository
+      .createQueryBuilder()
+      .select(['Sale.id', 'Sale.storeId', 'Sale.dateSync', 'Sale.budgetId'])
       .where('Sale.budgetId IS NULL')
       .getMany();
   }
@@ -119,7 +128,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
   ): Promise<FindForGraphicResponse> {
     const queryPeriod = getQueryPeriod(from, to);
 
-    const sales = await this.repository
+    const results = await this.repository
       .createQueryBuilder()
       .select([
         'Sale.date',
@@ -137,6 +146,26 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .orderBy('Sale.date', 'ASC')
       .getMany();
 
-    return { sales, period: { from, to } };
+    return { results, period: { from, to } };
+  }
+
+  public async findForGraphicByCustomerId(
+    customerId: number,
+    storeId: number,
+    from: string,
+    to: string
+  ): Promise<FindForGraphicResponse> {
+    const queryPeriod = getQueryPeriod(from, to);
+
+    const results = await this.repository
+      .createQueryBuilder()
+      .select(['Sale.date', 'Sale.total'])
+      .where('Sale.customerId = :customerId', { customerId })
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere(queryPeriod.query, queryPeriod.params)
+      .orderBy('Sale.date', 'ASC')
+      .getMany();
+
+    return { results, period: { from, to } };
   }
 }

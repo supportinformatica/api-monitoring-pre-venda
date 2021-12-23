@@ -9,6 +9,6 @@ export class LastUpdateJobs {
   @Cron('00 */30 8-16 * * 1-5', { timeZone: 'America/Bahia' })
   public handleCron() {
     console.log(`#### VERIFY LAST UPDATE (${new Date()}) ####`);
-    this.lastUpdateService.verifyLastUpdate();
+    this.lastUpdateService.verifyLastUpdate().catch(err => console.error(err));
   }
 }

@@ -17,8 +17,8 @@ import { PerDaySchema, PeriodSchema } from '../../../common/schemas/period';
 import { SalePerDaySchema } from '../../sale/schemas/per-day';
 import { getKeyName } from '@src/shared/key-name';
 import { GraphicService } from '../../graphic/services';
-import { PeriodOptionsSchema } from '../../graphic/schemas/period-options-schema';
-import { getTypePeriod } from './helpers/get-type-period';
+import { PeriodOptionsSchema } from '../../../common/schemas/period-options-schema';
+import { getTypePeriod } from '../../../common/helpers';
 import { SaleGraphicBySellerSchema } from '../../graphic/schemas/sale-graphic-by-seller';
 
 @Controller('sellers')

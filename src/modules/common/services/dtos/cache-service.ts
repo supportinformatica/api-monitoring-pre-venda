@@ -1,4 +1,5 @@
 import { CustomerAndInfo } from '@src/modules/app/customer/interfaces/customer-and-info';
+import { PurchasesGraphic } from '@src/modules/app/graphic/interfaces/purchases-graphic-by-customer';
 import { SaleGraphicBySeller } from '@src/modules/app/graphic/interfaces/sale-graphic-by-seller';
 import { SaleBySeller } from '@src/modules/app/sale/interfaces/sale-by-seller';
 import { PurchasesPerDay, SalePerDay } from '@src/modules/app/sale/interfaces/sale-per-day';
@@ -8,7 +9,7 @@ type SaleCachePayload = SalePerDay | PurchasesPerDay | SaleBySeller[];
 
 type SellerCachePayload = Seller | ISellerAndInfo[] | SaleGraphicBySeller;
 
-type CustomerCachePayload = CustomerAndInfo[];
+type CustomerCachePayload = CustomerAndInfo[] | PurchasesGraphic;
 
 export type CachePayload = SaleCachePayload | SellerCachePayload | CustomerCachePayload;
 

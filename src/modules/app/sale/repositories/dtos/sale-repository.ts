@@ -13,7 +13,7 @@ export interface QueryPeriod {
 }
 
 export interface FindForGraphicResponse {
-  sales: ISale[];
+  results: ISale[];
   period: {
     from: string;
     to: string;
@@ -32,7 +32,7 @@ export interface SeleRepositoryDTO {
   ) => Promise<ISale[]>;
 
   findInfoByCustomerId: (
-    customer: number,
+    customerId: number,
     storeId: number,
     from?: string,
     to?: string
@@ -40,6 +40,13 @@ export interface SeleRepositoryDTO {
 
   findForGraphicBySellerId: (
     sellerId: number,
+    storeId: number,
+    from: string,
+    to: string
+  ) => Promise<FindForGraphicResponse>;
+
+  findForGraphicByCustomerId: (
+    customerId: number,
     storeId: number,
     from: string,
     to: string

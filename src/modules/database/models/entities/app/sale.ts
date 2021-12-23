@@ -18,7 +18,7 @@ export class Sale implements ISale {
   @PrimaryColumn({ type: 'integer' })
   public readonly id!: number;
 
-  @Column({ type: 'integer', name: 'nrOrcamento' })
+  @Column({ type: 'integer', name: 'nrOrcamento', nullable: true })
   public readonly budgetId!: number;
 
   @Column({ type: 'integer', name: 'store_id' })

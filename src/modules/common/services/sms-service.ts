@@ -3,12 +3,13 @@ import { HttpService } from '@nestjs/axios';
 import { SmsServiceDTO, SendWarn, SmsPayload } from './dtos/sms-service';
 
 import { AUTH_KEY_SMS, DEFAULT_PHONE_NUMBER } from '@src/server/settings';
+import { externalSMS } from '@src/shared/externals';
 
 @Injectable()
 export class SmsService implements SmsServiceDTO {
   constructor(private readonly http: HttpService) {}
 
-  public sendWarnSync(payload: SendWarn[]) {
+  public async sendWarnSync(payload: SendWarn[]) {
     const data: SmsPayload[] = payload.map(({ name }) => ({
       key: AUTH_KEY_SMS,
       number: DEFAULT_PHONE_NUMBER,
@@ -16,10 +17,12 @@ export class SmsService implements SmsServiceDTO {
       msg: `Sync da loja "${name}" precisa de atenção`
     }));
 
-    this.http.post('send', data);
+    const results = await externalSMS.post('send', data);
+
+    console.log({ results });
   }
 
-  public sendWarnSales(payload: SendWarn[]) {
+  public async sendWarnSales(payload: SendWarn[]) {
     const data: SmsPayload[] = payload.map(({ name, quantity }) => {
       const message =
         quantity === 1
@@ -34,6 +37,8 @@ export class SmsService implements SmsServiceDTO {
       };
     });
 
-    this.http.post('send', data);
+    const results = await externalSMS.post('send', data);
+
+    console.log({ results });
   }
 }
