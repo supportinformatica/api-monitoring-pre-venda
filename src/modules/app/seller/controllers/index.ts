@@ -14,7 +14,7 @@ import { Seller } from '../schemas/seller';
 import { SaleService } from '../../sale/services';
 import { SaleInfoByCustomerSchema } from '../../sale/schemas/sale-info';
 import { PerDaySchema, PeriodSchema } from '../../../common/schemas/period';
-import { SalePerDaySchema } from '../../sale/schemas/sale-per-day';
+import { SalePerDaySchema } from '../../sale/schemas/per-day';
 import { getKeyName } from '@src/shared/key-name';
 import { GraphicService } from '../../graphic/services';
 import { PeriodOptionsSchema } from '../../graphic/schemas/period-options-schema';

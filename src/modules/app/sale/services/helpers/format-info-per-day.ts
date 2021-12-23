@@ -1,5 +1,5 @@
 import { ISale } from '@src/modules/database/interfaces';
-import { SalePerDayData, SalePerDay } from '../../interfaces/sale-per-day';
+import { PerDayData, SalePerDay, PurchasesPerDay } from '../../interfaces/sale-per-day';
 
 function formatDay(index: number): string {
   const date = new Date(new Date().setDate(new Date().getUTCDate() - index));
@@ -9,7 +9,7 @@ function formatDay(index: number): string {
   return usDate.split('-').reverse().slice(0, 2).join('/');
 }
 
-function getMax(sales: SalePerDayData[]): number {
+function getMax(sales: PerDayData[]): number {
   if (!sales.length) return 10;
 
   const max = sales.map(({ quantity }) => quantity).reduce((max, curr) => Math.max(max, curr));
@@ -19,7 +19,7 @@ function getMax(sales: SalePerDayData[]): number {
   return max;
 }
 
-function formatSaleDataPerDay(salesPerDay: ISale[][]): SalePerDayData[] {
+function formatPerDay(salesPerDay: ISale[][]): PerDayData[] {
   return salesPerDay
     .map((sales, index) => {
       return {
@@ -31,8 +31,15 @@ function formatSaleDataPerDay(salesPerDay: ISale[][]): SalePerDayData[] {
 }
 
 export function formatSalePerDay(salesPerDay: ISale[][]): SalePerDay {
-  const sales = formatSaleDataPerDay(salesPerDay);
+  const sales = formatPerDay(salesPerDay);
   const max = getMax(sales);
 
   return { max, sales };
+}
+
+export function formatPurchasesPerDay(purchasesPerDay: ISale[][]): PurchasesPerDay {
+  const purchases = formatPerDay(purchasesPerDay);
+  const max = getMax(purchases);
+
+  return { max, purchases };
 }

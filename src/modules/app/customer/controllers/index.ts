@@ -1,9 +1,16 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { BadRequestException, Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags
+} from '@nestjs/swagger';
 import { StoreId } from '@src/modules/common/guard/token';
-import { PeriodSchema } from '@src/modules/common/schemas/period';
+import { PerDaySchema, PeriodSchema } from '@src/modules/common/schemas/period';
 import { CacheService } from '@src/modules/common/services/cache-service';
 import { getKeyName } from '@src/shared/key-name';
+import { PurchasesPerDaySchema } from '../../sale/schemas/per-day';
 import { SaleInfoByCustomerSchema } from '../../sale/schemas/sale-info';
 import { SaleService } from '../../sale/services';
 import { CustomerAndInfoSchema } from '../schemas/customer-and-info';
@@ -87,5 +94,43 @@ export class CustomerController {
     @StoreId() storeId: number
   ) {
     return this.saleService.findInfoByCustomerId(id, storeId, query?.from, query?.to);
+  }
+
+  @Get(':id/purchases-summary-per-day')
+  @ApiOkResponse({ type: PurchasesPerDaySchema })
+  @ApiBadRequestResponse({ description: '"Invalid day format" or "Out range day"' })
+  public async findInfoSalesPerDay(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() query: PerDaySchema,
+    @StoreId() storeId: number
+  ) {
+    const days = parseInt(query.days);
+
+    if (Number.isNaN(days)) throw new BadRequestException('Invalid day format');
+
+    if (days < 1 || days > 90) throw new BadRequestException('Out range day');
+
+    const keyName = getKeyName({
+      identifiers: {
+        storeId,
+        sellerId: id
+      },
+      layer: 'controller',
+      method: 'CUSTOMER_INFO_PURCHASES_PER_DAY',
+      module: 'customer',
+      periods: {
+        days
+      }
+    });
+
+    if (await this.cache.has(keyName)) {
+      return this.cache.get(keyName);
+    }
+
+    const purchasesPerDay = await this.saleService.findInfoByCustomerIdPerDay(id, storeId, days);
+
+    this.cache.set(keyName, purchasesPerDay);
+
+    return purchasesPerDay;
   }
 }
