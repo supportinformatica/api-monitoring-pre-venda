@@ -7,9 +7,13 @@ import {
   ApiTags
 } from '@nestjs/swagger';
 import { StoreId } from '@src/modules/common/guard/token';
+import { getTypePeriod } from '@src/modules/common/helpers';
 import { PerDaySchema, PeriodSchema } from '@src/modules/common/schemas/period';
+import { PeriodOptionsSchema } from '@src/modules/common/schemas/period-options-schema';
 import { CacheService } from '@src/modules/common/services/cache-service';
 import { getKeyName } from '@src/shared/key-name';
+import { PurchaseGraphicBySellerSchema } from '../../graphic/schemas/purchase-graphic-by-customer';
+import { GraphicService } from '../../graphic/services';
 import { PurchasesPerDaySchema } from '../../sale/schemas/per-day';
 import { SaleInfoByCustomerSchema } from '../../sale/schemas/sale-info';
 import { SaleService } from '../../sale/services';
@@ -24,7 +28,8 @@ export class CustomerController {
   constructor(
     private readonly service: CustomerService,
     private readonly cache: CacheService,
-    private readonly saleService: SaleService
+    private readonly saleService: SaleService,
+    private readonly graphicService: GraphicService
   ) {}
 
   @Get('')
@@ -94,6 +99,41 @@ export class CustomerController {
     @StoreId() storeId: number
   ) {
     return this.saleService.findInfoByCustomerId(id, storeId, query?.from, query?.to);
+  }
+
+  @Get(':id/purchases-graphic')
+  @ApiOkResponse({ type: PurchaseGraphicBySellerSchema })
+  public async findSaleGraphic(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() query: PeriodOptionsSchema,
+    @StoreId() storeId: number
+  ) {
+    const quantity = parseInt(query.quantity);
+
+    if (Number.isNaN(quantity)) throw new BadRequestException('Invalid quantity format');
+
+    const type = getTypePeriod(query.type);
+
+    const keyName = getKeyName({
+      identifiers: { storeId, sellerId: id },
+      layer: 'controller',
+      method: 'CUSTOMER_PURCHASES_GRAPHIC',
+      module: 'customer',
+      periods: {
+        type,
+        quantity
+      }
+    });
+
+    if (await this.cache.has(keyName)) {
+      return this.cache.get(keyName);
+    }
+
+    const purchasesGraphic = await this.graphicService.purchases(id, storeId, { quantity, type });
+
+    this.cache.set(keyName, purchasesGraphic);
+
+    return purchasesGraphic;
   }
 
   @Get(':id/purchases-summary-per-day')

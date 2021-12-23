@@ -19,7 +19,8 @@ type MethodsSaleController = 'SALE_ALL_BY_SELLER';
 type MethodsCustomerController =
   | 'CUSTOMER_TOP_FIVE'
   | 'CUSTOMER_INFO'
-  | 'CUSTOMER_INFO_PURCHASES_PER_DAY';
+  | 'CUSTOMER_INFO_PURCHASES_PER_DAY'
+  | 'CUSTOMER_PURCHASES_GRAPHIC';
 
 type MethodsController =
   | MethodsSellerController

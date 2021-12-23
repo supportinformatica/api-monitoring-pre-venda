@@ -5,7 +5,7 @@ import * as Helpers from '@src/modules/common/helpers';
 
 function getRanking(customers: CustomerAndInfo[]): CustomerAndInfo[] {
   return customers
-    .sort((prev, next) => next.totalValue - prev.totalValue)
+    .sort((prev, next) => next.totalSales - prev.totalSales)
     .map((seller, index) => ({
       ...seller,
       ranking: index + 1

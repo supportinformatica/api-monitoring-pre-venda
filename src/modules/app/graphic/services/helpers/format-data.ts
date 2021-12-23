@@ -1,17 +1,19 @@
 import { ISale } from '@src/modules/database/interfaces';
 import {
   Sale,
-  Data,
+  SaleData,
   TopFiveCustomers,
   SaleGraphicBySeller,
   DataTopCustomers
 } from '../../interfaces/sale-graphic-by-seller';
 
+import { PurchasesGraphic, PurchaseData } from '../../interfaces/purchases-graphic-by-customer';
+
 import * as Helpers from '@src/modules/common/helpers';
 import { FindForGraphicResponse } from '@src/modules/app/sale/repositories/dtos/sale-repository';
 
-function getDecreasing(data: Data[]): Data[] {
-  let last: Data = data[0];
+function getDecreasing(data: SaleData[] | PurchaseData[]): SaleData[] | PurchaseData[] {
+  let last: SaleData | PurchaseData = data[0];
 
   return [
     last,
@@ -35,7 +37,7 @@ function getTopFiveCustomers(payload: FindForGraphicResponse[]): TopFiveCustomer
 
   for (const data of payload) {
     customers.push(
-      ...data.sales.map(({ customer: { name, id } }) => ({
+      ...data.results.map(({ customer: { name, id } }) => ({
         name,
         id
       }))
@@ -86,8 +88,8 @@ function formatSale({ products, total, customer }: ISale): Sale {
   };
 }
 
-function formatData(payload: FindForGraphicResponse): Data {
-  const sales = payload.sales.map(sale => formatSale(sale));
+function formatSaleData(payload: FindForGraphicResponse): SaleData {
+  const sales = payload.results.map(sale => formatSale(sale));
 
   const date = Helpers.formatDateDayAndMonth(new Date(payload.period.to));
 
@@ -109,7 +111,27 @@ function formatData(payload: FindForGraphicResponse): Data {
   };
 }
 
-function formatDataTopCustomers(topFive: TopFiveCustomers[], data: Data[]): DataTopCustomers[] {
+function formatPurchaseData(payload: FindForGraphicResponse): PurchaseData {
+  const date = Helpers.formatDateDayAndMonth(new Date(payload.period.to));
+
+  const values = payload.results.map(({ total }) => total);
+
+  const quantity = values.length;
+
+  const total = Helpers.getSum(values);
+
+  const isDefault = !quantity;
+
+  return {
+    date,
+    decreasing: true,
+    quantity,
+    total,
+    isDefault
+  };
+}
+
+function formatDataTopCustomers(topFive: TopFiveCustomers[], data: SaleData[]): DataTopCustomers[] {
   return topFive.map(customer => {
     return {
       id: customer.id,
@@ -137,7 +159,7 @@ export function formatSaleGraphic(
 ): SaleGraphicBySeller {
   const topFiveCustomers = getTopFiveCustomers(payload);
 
-  const data = getDecreasing(payload.map(data => formatData(data)));
+  const data = getDecreasing(payload.map(data => formatSaleData(data))) as SaleData[];
 
   const values = data.map(({ total }) => total);
   const quantities = data.map(({ quantity }) => quantity);
@@ -162,6 +184,35 @@ export function formatSaleGraphic(
     mediaValue,
     topFiveCustomers,
     totalSales,
+    totalValue
+  };
+}
+
+export function formatPurchasesGraphic(
+  payload: FindForGraphicResponse[],
+  quantityPeriod: number
+): PurchasesGraphic {
+  const data = getDecreasing(payload.map(data => formatPurchaseData(data))) as PurchaseData[];
+
+  const values = data.map(({ total }) => total);
+  const quantities = data.map(({ quantity }) => quantity);
+
+  const maxValue = Helpers.getMax(values);
+  const maxQuantity = Helpers.getMax(quantities);
+
+  const totalValue = Helpers.getSum(values);
+  const totalPurchases = Helpers.getSum(quantities);
+
+  const mediaPurchases = Helpers.getMedia(totalPurchases, quantityPeriod);
+  const mediaValue = Helpers.getMedia(totalValue, quantityPeriod);
+
+  return {
+    data,
+    maxQuantity,
+    maxValue,
+    mediaPurchases,
+    mediaValue,
+    totalPurchases,
     totalValue
   };
 }

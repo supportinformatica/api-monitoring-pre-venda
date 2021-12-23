@@ -17,7 +17,7 @@ export class SellerService implements SellerServiceDTO {
 
   private getRanking(sellers: ISellerAndInfo[]): ISellerAndInfo[] {
     return sellers
-      .sort((prev, next) => next.totalValue - prev.totalValue)
+      .sort((prev, next) => next.totalSales - prev.totalSales)
       .map((seller, index) => ({
         ...seller,
         ranking: index + 1
