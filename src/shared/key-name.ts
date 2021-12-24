@@ -4,7 +4,8 @@ type MethodsSalesRepository =
   | 'INFO_BY_SELLER_ID'
   | 'INFO_BY_CUSTOMER_ID'
   | 'ALL_BY_SELLER_ID'
-  | 'FOR_GRAPHIC_BY_SELLER_ID';
+  | 'FOR_GRAPHIC_BY_SELLER_ID'
+  | 'ALL_FOR_STORE';
 
 type MethodsRepository = MethodsSalesRepository;
 

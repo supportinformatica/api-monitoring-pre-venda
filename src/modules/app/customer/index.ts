@@ -10,7 +10,7 @@ import { CustomerService } from './services';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Customer]), CommonModule, SaleModule, GraphicModule],
-  exports: [CustomerService],
+  exports: [CustomerService, CustomCustomerRepository],
   providers: [CustomCustomerRepository, CustomerService],
   controllers: [CustomerController]
 })
