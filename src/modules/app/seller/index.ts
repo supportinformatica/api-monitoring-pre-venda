@@ -10,6 +10,7 @@ import { SellerService } from './services';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Seller]), CommonModule, SaleModule, GraphicModule],
+  exports: [CustomSellerRepository],
   providers: [CustomSellerRepository, SellerService],
   controllers: [SellerController]
 })

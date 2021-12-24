@@ -18,11 +18,19 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .getMany();
   }
 
-  public teste() {
+  public findAllForStore(storeId: number) {
+    const keyName = getKeyName({
+      identifiers: { storeId },
+      layer: 'repository',
+      method: 'ALL_FOR_STORE',
+      module: 'sale'
+    });
+
     return this.repository
       .createQueryBuilder()
-      .select(['Sale.id', 'Sale.storeId', 'Sale.dateSync', 'Sale.budgetId'])
-      .where('Sale.budgetId IS NULL')
+      .select(['Sale.total'])
+      .where('Sale.storeId = :storeId', { storeId })
+      .cache(keyName)
       .getMany();
   }
 
