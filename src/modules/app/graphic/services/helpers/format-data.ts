@@ -1,19 +1,23 @@
 import { ISale } from '@src/modules/database/interfaces';
 import {
   Sale,
-  SaleData,
+  SaleDataBySeller,
   TopFiveCustomers,
   SaleGraphicBySeller,
   DataTopCustomers
 } from '../../interfaces/sale-graphic-by-seller';
+
+import { SaleDataByStore, SaleGraphicByStore } from '../../interfaces/sale-graphic-by-store';
 
 import { PurchasesGraphic, PurchaseData } from '../../interfaces/purchases-graphic-by-customer';
 
 import * as Helpers from '@src/modules/common/helpers';
 import { FindForGraphicResponse } from '@src/modules/app/sale/repositories/dtos/sale-repository';
 
-function getDecreasing(data: SaleData[] | PurchaseData[]): SaleData[] | PurchaseData[] {
-  let last: SaleData | PurchaseData = data[0];
+function getDecreasing(
+  data: SaleDataBySeller[] | PurchaseData[] | SaleDataByStore[]
+): SaleDataBySeller[] | PurchaseData[] | SaleDataByStore[] {
+  let last: SaleDataBySeller | PurchaseData = data[0];
 
   return [
     last,
@@ -88,7 +92,7 @@ function formatSale({ products, total, customer }: ISale): Sale {
   };
 }
 
-function formatSaleData(payload: FindForGraphicResponse): SaleData {
+function formatSaleDataBySeller(payload: FindForGraphicResponse): SaleDataBySeller {
   const sales = payload.results.map(sale => formatSale(sale));
 
   const date = Helpers.formatDateDayAndMonth(new Date(payload.period.to));
@@ -110,8 +114,9 @@ function formatSaleData(payload: FindForGraphicResponse): SaleData {
     isDefault
   };
 }
-
-function formatPurchaseData(payload: FindForGraphicResponse): PurchaseData {
+function formatPurchaseOrSaleByStore(
+  payload: FindForGraphicResponse
+): PurchaseData | SaleDataByStore {
   const date = Helpers.formatDateDayAndMonth(new Date(payload.period.to));
 
   const values = payload.results.map(({ total }) => total);
@@ -131,7 +136,10 @@ function formatPurchaseData(payload: FindForGraphicResponse): PurchaseData {
   };
 }
 
-function formatDataTopCustomers(topFive: TopFiveCustomers[], data: SaleData[]): DataTopCustomers[] {
+function formatDataTopCustomers(
+  topFive: TopFiveCustomers[],
+  data: SaleDataBySeller[]
+): DataTopCustomers[] {
   return topFive.map(customer => {
     return {
       id: customer.id,
@@ -153,13 +161,15 @@ function formatDataTopCustomers(topFive: TopFiveCustomers[], data: SaleData[]): 
   });
 }
 
-export function formatSaleGraphic(
+export function formatSaleGraphicBySeller(
   payload: FindForGraphicResponse[],
   quantityPeriod: number
 ): SaleGraphicBySeller {
   const topFiveCustomers = getTopFiveCustomers(payload);
 
-  const data = getDecreasing(payload.map(data => formatSaleData(data))) as SaleData[];
+  const data = getDecreasing(
+    payload.map(data => formatSaleDataBySeller(data))
+  ) as SaleDataBySeller[];
 
   const values = data.map(({ total }) => total);
   const quantities = data.map(({ quantity }) => quantity);
@@ -188,11 +198,44 @@ export function formatSaleGraphic(
   };
 }
 
+export function formatSaleGraphicByStore(
+  payload: FindForGraphicResponse[],
+  quantityPeriod: number
+): SaleGraphicByStore {
+  const data = getDecreasing(
+    payload.map(data => formatPurchaseOrSaleByStore(data))
+  ) as SaleDataByStore[];
+
+  const values = data.map(({ total }) => total);
+  const quantities = data.map(({ quantity }) => quantity);
+
+  const maxValue = Helpers.getMax(values);
+  const maxQuantity = Helpers.getMax(quantities);
+
+  const totalValue = Helpers.getSum(values);
+  const totalSales = Helpers.getSum(quantities);
+
+  const mediaSales = Helpers.getMedia(totalSales, quantityPeriod);
+  const mediaValue = Helpers.getMedia(totalValue, quantityPeriod);
+
+  return {
+    data,
+    maxQuantity,
+    maxValue,
+    mediaSales,
+    mediaValue,
+    totalSales,
+    totalValue
+  };
+}
+
 export function formatPurchasesGraphic(
   payload: FindForGraphicResponse[],
   quantityPeriod: number
 ): PurchasesGraphic {
-  const data = getDecreasing(payload.map(data => formatPurchaseData(data))) as PurchaseData[];
+  const data = getDecreasing(
+    payload.map(data => formatPurchaseOrSaleByStore(data))
+  ) as PurchaseData[];
 
   const values = data.map(({ total }) => total);
   const quantities = data.map(({ quantity }) => quantity);
