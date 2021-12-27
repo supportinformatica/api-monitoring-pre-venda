@@ -26,6 +26,8 @@ export interface SeleRepositoryDTO {
   findAllBySellerId: (sellerId: number, storeId: number) => Promise<ISale[]>;
   findAllForStore: (storeId: number) => Promise<ISale[]>;
   findLastFiveSalesByStoreId: (storeId: number) => Promise<ISale[]>;
+  findInfoByStoreId: (storeId: number, from?: string, to?: string) => Promise<ISale[]>;
+
   findInfoBySellerId: (
     sellerId: number,
     storeId: number,

@@ -24,6 +24,10 @@ export class SaleService implements SaleServiceDTO {
     return formatAllBySeller(await this.repository.findAllBySellerId(sellerId, storeId));
   }
 
+  public async findInfoByStoreId(storeId: number, from?: string, to?: string) {
+    return formatInfoBySeller(await this.repository.findInfoByStoreId(storeId, from, to), from, to);
+  }
+
   public async findInfoBySellerId(sellerId: number, storeId: number, from?: string, to?: string) {
     return formatInfoBySeller(
       await this.repository.findInfoBySellerId(sellerId, storeId, from, to),
@@ -43,6 +47,16 @@ export class SaleService implements SaleServiceDTO {
       from,
       to
     );
+  }
+
+  public async findInfoByStoreIdPerDay(storeId: number, days = 7) {
+    const promises = new Array(days).fill('').map((_, index) => {
+      const perDay = new Date(new Date().setDate(new Date().getUTCDate() - index)).toISOString();
+
+      return this.repository.findInfoByStoreId(storeId, perDay, perDay);
+    });
+
+    return formatSalePerDay(await Promise.all(promises));
   }
 
   public async findInfoBySellerIdPerDay(sellerId: number, storeId: number, days = 7) {

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CommonModule } from '@src/modules/common';
 import { Store } from '@src/modules/database/models';
 import { CustomerModule } from '../customer';
 import { SaleModule } from '../sale';
@@ -9,7 +10,13 @@ import { CustomStoreRepository } from './repositories';
 import { StoreService } from './services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Store]), SellerModule, CustomerModule, SaleModule],
+  imports: [
+    TypeOrmModule.forFeature([Store]),
+    CommonModule,
+    SellerModule,
+    CustomerModule,
+    SaleModule
+  ],
   exports: [StoreService],
   controllers: [StoreController],
   providers: [CustomStoreRepository, StoreService]

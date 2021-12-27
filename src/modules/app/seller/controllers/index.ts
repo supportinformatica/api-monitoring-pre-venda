@@ -12,7 +12,7 @@ import { SellerService } from '../services';
 import { SellersAndInfo } from '../schemas/sellers-and-info';
 import { Seller } from '../schemas/seller';
 import { SaleService } from '../../sale/services';
-import { SaleInfoByCustomerSchema } from '../../sale/schemas/sale-info';
+import { SaleInfoByStoreOrSellerSchema } from '../../sale/schemas/sale-info';
 import { PerDaySchema, PeriodSchema } from '../../../common/schemas/period';
 import { SalePerDaySchema } from '../../sale/schemas/per-day';
 import { getKeyName } from '@src/shared/key-name';
@@ -92,7 +92,7 @@ export class SellerController {
   }
 
   @Get(':id/sales-summary')
-  @ApiOkResponse({ type: SaleInfoByCustomerSchema })
+  @ApiOkResponse({ type: SaleInfoByStoreOrSellerSchema })
   public findInfoPurchases(
     @Param('id', ParseIntPipe) id: number,
     @Query() query: PeriodSchema,

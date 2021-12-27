@@ -98,6 +98,29 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .getOne();
   }
 
+  public findInfoByStoreId(storeId: number, from?: string, to?: string) {
+    const queryPeriod = getQueryPeriod(from, to);
+
+    const keyName = getKeyName({
+      identifiers: { storeId },
+      layer: 'repository',
+      method: 'INFO_BY_STORE_ID',
+      module: 'sale',
+      periods: {
+        fromTo: queryPeriod
+      }
+    });
+
+    return this.repository
+      .createQueryBuilder()
+      .select(['Sale.date', 'Sale.total'])
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere(queryPeriod.query, queryPeriod.params)
+      .orderBy('Sale.date', 'ASC')
+      .cache(keyName)
+      .getMany();
+  }
+
   public findInfoBySellerId(sellerId: number, storeId: number, from?: string, to?: string) {
     const queryPeriod = getQueryPeriod(from, to);
 
