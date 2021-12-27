@@ -64,4 +64,8 @@ export class SaleService implements SaleServiceDTO {
 
     return formatPurchasesPerDay(await Promise.all(promises));
   }
+
+  public async findLastFiveSalesByStoreId(storeId: number) {
+    return (await this.repository.findLastFiveSalesByStoreId(storeId)).slice(0, 5);
+  }
 }

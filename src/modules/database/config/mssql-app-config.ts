@@ -26,6 +26,7 @@ export const sqlServerAppConnection: ConnectionOptions = {
     }
   },
   options: {
+    connectTimeout: Settings.MSSQL_APP_TIMEOUT,
     encrypt: false
   }
 };

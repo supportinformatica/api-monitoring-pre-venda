@@ -10,6 +10,24 @@ import { getQueryPeriod } from './helpers/get-query-period';
 export class CustomSaleRepository implements SeleRepositoryDTO {
   constructor(@InjectRepository(Sale) private readonly repository: Repository<Sale>) {}
 
+  public findLastFiveSalesByStoreId(storeId: number) {
+    const keyName = getKeyName({
+      identifiers: { storeId },
+      layer: 'repository',
+      method: 'LAST_FIVE_SALES_BY_STORE_ID',
+      module: 'sale'
+    });
+
+    return this.repository
+      .createQueryBuilder()
+      .select(['Sale.id', 'Sale.total', 'customer.id', 'customer.name'])
+      .innerJoin('Sale.customer', 'customer')
+      .where('Sale.storeId = :storeId', { storeId })
+      .orderBy('Sale.date', 'DESC')
+      .cache(keyName)
+      .getMany();
+  }
+
   public findNullSales() {
     return this.repository
       .createQueryBuilder()
