@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from '@src/modules/common';
 import { Store } from '@src/modules/database/models';
 import { CustomerModule } from '../customer';
+import { GraphicModule } from '../graphic';
 import { SaleModule } from '../sale';
 import { SellerModule } from '../seller';
 import { StoreController } from './controllers';
@@ -15,7 +16,8 @@ import { StoreService } from './services';
     CommonModule,
     SellerModule,
     CustomerModule,
-    SaleModule
+    SaleModule,
+    GraphicModule
   ],
   exports: [StoreService],
   controllers: [StoreController],

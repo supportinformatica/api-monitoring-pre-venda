@@ -11,7 +11,7 @@ export interface Sale {
   customerId: number;
 }
 
-export interface SaleData {
+export interface SaleDataBySeller {
   sales: Sale[];
   date: string;
   quantity: number;
@@ -21,13 +21,13 @@ export interface SaleData {
 }
 
 export interface DataTopCustomers {
-  data: Array<Pick<SaleData, 'date' | 'quantity'>>;
+  data: Array<Pick<SaleDataBySeller, 'date' | 'quantity'>>;
   id: number;
   ranking: number;
 }
 
 export interface SaleGraphicBySeller {
-  data: SaleData[];
+  data: SaleDataBySeller[];
   dataTopCustomers: DataTopCustomers[];
   totalSales: number;
   mediaSales: number;

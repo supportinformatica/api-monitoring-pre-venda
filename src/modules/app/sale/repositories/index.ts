@@ -169,6 +169,33 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .getMany();
   }
 
+  public async findForGraphicByStoreId(
+    storeId: number,
+    from: string,
+    to: string
+  ): Promise<FindForGraphicResponse> {
+    const queryPeriod = getQueryPeriod(from, to);
+
+    const results = await this.repository
+      .createQueryBuilder()
+      .select([
+        'Sale.date',
+        'Sale.total',
+        'Sale.discount',
+        'products.id',
+        'customer.id',
+        'customer.name'
+      ])
+      .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.products', 'products')
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere(queryPeriod.query, queryPeriod.params)
+      .orderBy('Sale.date', 'ASC')
+      .getMany();
+
+    return { results, period: { from, to } };
+  }
+
   public async findForGraphicBySellerId(
     sellerId: number,
     storeId: number,

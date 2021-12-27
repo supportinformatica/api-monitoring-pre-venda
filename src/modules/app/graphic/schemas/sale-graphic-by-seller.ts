@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   SaleGraphicBySeller,
-  SaleData,
+  SaleDataBySeller,
   DataTopCustomers,
   TopFiveCustomers,
   Sale
@@ -18,7 +18,7 @@ class SaleSchema implements Sale {
   public readonly customerId!: number;
 }
 
-class SaleDataSchema implements SaleData {
+class SaleDataBySellerSchema implements SaleDataBySeller {
   @ApiProperty({ isArray: true, type: SaleSchema })
   public readonly sales!: SaleSchema[];
 
@@ -72,8 +72,8 @@ class TopFiveCustomersSchema implements TopFiveCustomers {
 }
 
 export class SaleGraphicBySellerSchema implements SaleGraphicBySeller {
-  @ApiProperty({ isArray: true, type: SaleDataSchema })
-  public readonly data!: SaleDataSchema[];
+  @ApiProperty({ isArray: true, type: SaleDataBySellerSchema })
+  public readonly data!: SaleDataBySellerSchema[];
 
   @ApiProperty({ isArray: true, type: DataTopCustomersSchema })
   public readonly dataTopCustomers!: DataTopCustomersSchema[];
