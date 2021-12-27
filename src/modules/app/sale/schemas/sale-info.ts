@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { SaleAndInfoBySeller, SaleAndInfoByCustomer } from '../interfaces/sale-and-info';
 
-export class SaleInfoBySellerSchema implements SaleAndInfoBySeller {
+export class SaleInfoByStoreOrSellerSchema implements SaleAndInfoBySeller {
   @ApiProperty({ type: 'string' })
   public readonly beginningPeriod!: string;
 

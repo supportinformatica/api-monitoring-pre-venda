@@ -1,6 +1,7 @@
 import { QueryPeriod } from '@src/modules/app/sale/repositories/dtos/sale-repository';
 
 type MethodsSalesRepository =
+  | 'INFO_BY_STORE_ID'
   | 'INFO_BY_SELLER_ID'
   | 'INFO_BY_CUSTOMER_ID'
   | 'ALL_BY_SELLER_ID'
@@ -9,6 +10,8 @@ type MethodsSalesRepository =
   | 'LAST_FIVE_SALES_BY_STORE_ID';
 
 type MethodsRepository = MethodsSalesRepository;
+
+type MethodsStoreController = 'STORE_INFO_SALES_PER_DAY';
 
 type MethodsSellerController =
   | 'SELLER_INFO_SALES_PER_DAY'
@@ -25,6 +28,7 @@ type MethodsCustomerController =
   | 'CUSTOMER_PURCHASES_GRAPHIC';
 
 type MethodsController =
+  | MethodsStoreController
   | MethodsSellerController
   | MethodsSaleController
   | MethodsCustomerController;
@@ -33,7 +37,7 @@ type Controller = 'controller';
 
 type Repository = 'repository';
 
-type Module = 'sale' | 'seller' | 'customer';
+type Module = 'sale' | 'seller' | 'customer' | 'store';
 
 type Layer = Controller | Repository;
 

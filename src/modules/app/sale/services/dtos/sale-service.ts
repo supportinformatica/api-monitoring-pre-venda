@@ -15,6 +15,8 @@ export interface SaleServiceDTO {
 
   findAllBySellerId: (sellerId: number, storeId: number) => Promise<SaleBySeller[]>;
 
+  findInfoByStoreId: (storeId: number, from?: string, to?: string) => Promise<SaleAndInfoBySeller>;
+
   findInfoBySellerId: (
     sellerId: number,
     storeId: number,
@@ -28,6 +30,8 @@ export interface SaleServiceDTO {
     from?: string,
     to?: string
   ) => Promise<SaleAndInfoByCustomer>;
+
+  findInfoByStoreIdPerDay: (storeId: number, days: number) => Promise<SalePerDay>;
 
   findInfoBySellerIdPerDay: (
     sellerId: number,
