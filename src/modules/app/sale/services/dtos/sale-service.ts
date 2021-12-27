@@ -4,11 +4,14 @@ import { SaleAndInfoByCustomer, SaleAndInfoBySeller } from '../../interfaces/sal
 import { SaleById } from '../../interfaces/sale-by-id';
 import { SaleBySeller } from '../../interfaces/sale-by-seller';
 import { SalePerDay, PurchasesPerDay } from '../../interfaces/sale-per-day';
+import { LastFiveSales } from '../../interfaces/last-five-sales';
 
 export type FindResponse = Either<NotFoundException, SaleById>;
 
 export interface SaleServiceDTO {
   findById: (id: number, storeId: number) => Promise<FindResponse>;
+
+  findLastFiveSalesByStoreId: (storeId: number) => Promise<LastFiveSales[]>;
 
   findAllBySellerId: (sellerId: number, storeId: number) => Promise<SaleBySeller[]>;
 
