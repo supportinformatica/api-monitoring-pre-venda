@@ -5,6 +5,7 @@ import { SaleById } from '../../interfaces/sale-by-id';
 import { SaleBySeller } from '../../interfaces/sale-by-seller';
 import { SalePerDay, PurchasesPerDay } from '../../interfaces/sale-per-day';
 import { LastFiveSales } from '../../interfaces/last-five-sales';
+import { SaleByCustomer } from '../../interfaces/sales-by-customer-per-period';
 
 export type FindResponse = Either<NotFoundException, SaleById>;
 
@@ -16,6 +17,13 @@ export interface SaleServiceDTO {
   findAllBySellerId: (sellerId: number, storeId: number) => Promise<SaleBySeller[]>;
 
   findInfoByStoreId: (storeId: number, from?: string, to?: string) => Promise<SaleAndInfoBySeller>;
+
+  findByCustomerPerPeriod: (
+    customerId: number,
+    storeId: number,
+    from?: string,
+    to?: string
+  ) => Promise<SaleByCustomer[]>;
 
   findInfoBySellerId: (
     sellerId: number,

@@ -33,6 +33,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .createQueryBuilder()
       .select(['Sale.id', 'Sale.storeId', 'Sale.dateSync'])
       .where('Sale.budgetId IS NULL')
+      .andWhere('Sale.storeId <> :storeId', { storeId: 27 })
       .getMany();
   }
 
@@ -68,6 +69,30 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .orderBy('Sale.date', 'DESC')
+      .getMany();
+  }
+
+  public findByCustomerPerPeriod(customerId: number, storeId: number, from?: string, to?: string) {
+    const queryPeriod = getQueryPeriod(from, to);
+
+    const keyName = getKeyName({
+      identifiers: { storeId },
+      layer: 'repository',
+      method: 'PURCHASE_BY_CUSTOMER_PER_PERIOD',
+      module: 'sale',
+      periods: {
+        fromTo: queryPeriod
+      }
+    });
+
+    return this.repository
+      .createQueryBuilder()
+      .select(['Sale.id', 'Sale.total', 'Sale.date', 'Sale.saleType', 'Sale.saleStatus'])
+      .where('Sale.customerId = :customerId', { customerId })
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere(queryPeriod.query, queryPeriod.params)
+      .orderBy('Sale.date', 'ASC')
+      .cache(keyName)
       .getMany();
   }
 

@@ -19,7 +19,7 @@ type MethodsSellerController =
   | 'SELLER_INFO'
   | 'SELLER_SALE_GRAPHIC';
 
-type MethodsSaleController = 'SALE_ALL_BY_SELLER';
+type MethodsSaleController = 'SALE_ALL_BY_SELLER' | 'PURCHASE_BY_CUSTOMER_PER_PERIOD';
 
 type MethodsCustomerController =
   | 'CUSTOMER_TOP_FIVE'

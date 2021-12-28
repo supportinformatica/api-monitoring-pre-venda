@@ -4,9 +4,10 @@ import { SaleGraphicBySeller } from '@src/modules/app/graphic/interfaces/sale-gr
 import { SaleGraphicByStore } from '@src/modules/app/graphic/interfaces/sale-graphic-by-store';
 import { SaleBySeller } from '@src/modules/app/sale/interfaces/sale-by-seller';
 import { PurchasesPerDay, SalePerDay } from '@src/modules/app/sale/interfaces/sale-per-day';
+import { SaleByCustomer } from '@src/modules/app/sale/interfaces/sales-by-customer-per-period';
 import { ISellerAndInfo, Seller } from '@src/modules/app/seller/interfaces/seller-and-info';
 
-type SaleCachePayload = SalePerDay | PurchasesPerDay | SaleBySeller[];
+type SaleCachePayload = SalePerDay | PurchasesPerDay | SaleBySeller[] | SaleByCustomer[];
 
 type SellerCachePayload = Seller | ISellerAndInfo[] | SaleGraphicBySeller;
 

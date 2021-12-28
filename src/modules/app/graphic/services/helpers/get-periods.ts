@@ -9,7 +9,6 @@ function getPerMonth(weeks: number) {
   return new Array(weeks).fill('').map((_, index) => {
     const start = 30 * (index + 1) - 1;
     const end = 30 * index;
-
     const from = new Date(new Date().setDate(new Date().getUTCDate() - start)).toISOString();
     const to = new Date(new Date().setDate(new Date().getUTCDate() - end)).toISOString();
 
@@ -39,7 +38,7 @@ function getPerDay(days: number): Period[] {
 
 export function getPeriods(options: PeriodOptions): Period[] {
   const { type } = options;
-  const quantity = options.quantity;
+  const quantity = options.quantity + 1;
 
   if (type === 'MONTH') return getPerMonth(quantity).reverse();
 

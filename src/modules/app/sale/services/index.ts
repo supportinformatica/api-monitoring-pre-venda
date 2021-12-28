@@ -7,6 +7,7 @@ import { formatSalePerDay, formatPurchasesPerDay } from './helpers/format-info-p
 import { formatAllBySeller } from './helpers/format-all-by-seller';
 import { formatById } from './helpers/format-by-id';
 import { left, right } from '@src/shared/either';
+import { formatByCustomerPerPeriod } from './helpers/format-by-customer-per-period';
 
 @Injectable()
 export class SaleService implements SaleServiceDTO {
@@ -22,6 +23,17 @@ export class SaleService implements SaleServiceDTO {
 
   public async findAllBySellerId(sellerId: number, storeId: number) {
     return formatAllBySeller(await this.repository.findAllBySellerId(sellerId, storeId));
+  }
+
+  public async findByCustomerPerPeriod(
+    customerId: number,
+    storeId: number,
+    from?: string,
+    to?: string
+  ) {
+    return formatByCustomerPerPeriod(
+      await this.repository.findByCustomerPerPeriod(customerId, storeId, from, to)
+    );
   }
 
   public async findInfoByStoreId(storeId: number, from?: string, to?: string) {

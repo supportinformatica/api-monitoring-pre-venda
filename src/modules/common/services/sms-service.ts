@@ -9,7 +9,7 @@ import { externalSMS } from '@src/shared/externals';
 export class SmsService implements SmsServiceDTO {
   constructor(private readonly http: HttpService) {}
 
-  public async sendWarnSync(payload: SendWarn[]) {
+  public sendWarnSync(payload: SendWarn[]) {
     const data: SmsPayload[] = payload.map(({ name }) => ({
       key: AUTH_KEY_SMS,
       number: DEFAULT_PHONE_NUMBER,
@@ -17,9 +17,7 @@ export class SmsService implements SmsServiceDTO {
       msg: `Sync da loja "${name}" precisa de atenção`
     }));
 
-    const results = await externalSMS.post('send', data);
-
-    console.log({ results });
+    externalSMS.post('send', data);
   }
 
   public async sendWarnSales(payload: SendWarn[]) {
@@ -37,8 +35,6 @@ export class SmsService implements SmsServiceDTO {
       };
     });
 
-    const results = await externalSMS.post('send', data);
-
-    console.log({ results });
+    externalSMS.post('send', data);
   }
 }
