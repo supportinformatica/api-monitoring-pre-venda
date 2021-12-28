@@ -11,6 +11,7 @@ export type FindResponse = Either<NotFoundException, SaleById>;
 
 export interface SaleServiceDTO {
   findById: (id: number, storeId: number) => Promise<FindResponse>;
+  findPurchaseById: (id: number, storeId: number) => Promise<FindResponse>;
 
   findLastFiveSalesByStoreId: (storeId: number) => Promise<LastFiveSales[]>;
 

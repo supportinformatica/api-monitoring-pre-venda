@@ -87,7 +87,16 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
 
     return this.repository
       .createQueryBuilder()
-      .select(['Sale.id', 'Sale.total', 'Sale.date', 'Sale.saleType', 'Sale.saleStatus'])
+      .select([
+        'Sale.id',
+        'Sale.total',
+        'Sale.date',
+        'Sale.saleType',
+        'Sale.saleStatus',
+        'seller.id',
+        'seller.name'
+      ])
+      .innerJoin('Sale.seller', 'seller')
       .where('Sale.customerId = :customerId', { customerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
@@ -117,6 +126,33 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .innerJoin('Sale.products', 'products')
       .innerJoin('products.product', 'product')
       .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.paymentMethod', 'paymentMethod')
+      .where('Sale.id = :id', { id })
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .getOne();
+  }
+
+  public findPurchaseById(id: number, storeId: number) {
+    return this.repository
+      .createQueryBuilder()
+      .select([
+        'Sale.total',
+        'Sale.discount',
+        'Sale.date',
+        'Sale.observation',
+        'paymentMethod.name',
+        'products.quantity',
+        'products.grossValue',
+        'product.id',
+        'product.name',
+        'product.image',
+        'product.defaultImage',
+        'seller.id',
+        'seller.name'
+      ])
+      .innerJoin('Sale.products', 'products')
+      .innerJoin('products.product', 'product')
+      .innerJoin('Sale.seller', 'seller')
       .innerJoin('Sale.paymentMethod', 'paymentMethod')
       .where('Sale.id = :id', { id })
       .andWhere('Sale.storeId = :storeId', { storeId })

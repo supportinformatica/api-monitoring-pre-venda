@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { SaleById, SaleByIdPayment, SaleByIdProducts } from '../interfaces/sale-by-id';
 import { SaleCustomerSchema } from './sale-by-seller';
 
-class ProductSchema {
+export class ProductSchema {
   @ApiProperty({ type: 'number' })
   public readonly id!: number;
 
@@ -16,7 +16,7 @@ class ProductSchema {
   public readonly name!: string;
 }
 
-class SaleByIdProductsSchema implements SaleByIdProducts {
+export class SaleByIdProductsSchema implements SaleByIdProducts {
   @ApiProperty({ type: 'number' })
   public readonly quantity!: number;
 
@@ -27,7 +27,7 @@ class SaleByIdProductsSchema implements SaleByIdProducts {
   public readonly product!: ProductSchema;
 }
 
-class SaleByIdPaymentSchema implements SaleByIdPayment {
+export class SaleByIdPaymentSchema implements SaleByIdPayment {
   @ApiProperty({ type: 'string' })
   public readonly name!: string;
 }

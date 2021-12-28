@@ -5,6 +5,7 @@ import {
   PurchaseStatusSchema,
   PurchaseTypeSchema
 } from '../interfaces/sales-by-customer-per-period';
+import { SaleCustomerSchema } from './sale-by-seller';
 
 export class PurchaseByCustomerPerPeriod implements SaleByCustomer {
   @ApiProperty({ type: 'number' })
@@ -21,4 +22,7 @@ export class PurchaseByCustomerPerPeriod implements SaleByCustomer {
 
   @ApiProperty({ type: 'string', enum: ['SYNCHRONIZED', 'APPROVED', 'REJECTED'] })
   public readonly purchaseStatus!: PurchaseStatusSchema;
+
+  @ApiProperty({ type: SaleCustomerSchema })
+  public readonly seller!: SaleCustomerSchema;
 }
