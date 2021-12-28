@@ -4,6 +4,7 @@ import { StoreId } from '@src/modules/common/guard/token';
 import { PeriodSchema } from '@src/modules/common/schemas/period';
 import { CacheService } from '@src/modules/common/services/cache-service';
 import { getKeyName } from '@src/shared/key-name';
+import { PurchaseByIdSchema } from '../schemas/purchase-by-id';
 import { SaleByIdSchema } from '../schemas/sale-by-id';
 import { SaleBySellerSchema } from '../schemas/sale-by-seller';
 import { PurchaseByCustomerPerPeriod } from '../schemas/sales-by-customer-per-period';
@@ -20,6 +21,17 @@ export class SaleController {
   @ApiNotFoundResponse({ description: 'Sale is not found' })
   public async findById(@Param('id', ParseIntPipe) id: number, @StoreId() storeId: number) {
     const saleOrError = await this.service.findById(id, storeId);
+
+    if (saleOrError.isLeft()) throw saleOrError.value;
+
+    return saleOrError.value;
+  }
+
+  @Get('purchase-by-id/:id')
+  @ApiOkResponse({ type: PurchaseByIdSchema })
+  @ApiNotFoundResponse({ description: 'Purchase is not found' })
+  public async findPurchaseById(@Param('id', ParseIntPipe) id: number, @StoreId() storeId: number) {
+    const saleOrError = await this.service.findPurchaseById(id, storeId);
 
     if (saleOrError.isLeft()) throw saleOrError.value;
 

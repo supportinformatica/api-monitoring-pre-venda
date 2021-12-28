@@ -21,6 +21,14 @@ export class SaleService implements SaleServiceDTO {
     return right(formatById(sale));
   }
 
+  public async findPurchaseById(id: number, storeId: number): Promise<FindResponse> {
+    const sale = await this.repository.findPurchaseById(id, storeId);
+
+    if (!sale) return left(new NotFoundException('Sale is not found'));
+
+    return right(formatById(sale));
+  }
+
   public async findAllBySellerId(sellerId: number, storeId: number) {
     return formatAllBySeller(await this.repository.findAllBySellerId(sellerId, storeId));
   }
