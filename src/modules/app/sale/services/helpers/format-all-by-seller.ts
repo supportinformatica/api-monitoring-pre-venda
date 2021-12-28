@@ -27,6 +27,6 @@ function formatSale({ discount: _, ...sale }: ISale): SaleBySeller {
   };
 }
 
-export function formatAllBySeller(sales: ISale[]): SaleBySeller[] {
+export function formatBySellerPerPeriod(sales: ISale[]): SaleBySeller[] {
   return sales.map(sale => formatSale(sale));
 }

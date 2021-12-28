@@ -15,7 +15,12 @@ export interface SaleServiceDTO {
 
   findLastFiveSalesByStoreId: (storeId: number) => Promise<LastFiveSales[]>;
 
-  findAllBySellerId: (sellerId: number, storeId: number) => Promise<SaleBySeller[]>;
+  findBySellerPerPeriod: (
+    sellerId: number,
+    storeId: number,
+    from?: string,
+    to?: string
+  ) => Promise<SaleBySeller[]>;
 
   findInfoByStoreId: (storeId: number, from?: string, to?: string) => Promise<SaleAndInfoBySeller>;
 

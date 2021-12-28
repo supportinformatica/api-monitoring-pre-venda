@@ -7,7 +7,8 @@ type MethodsSalesRepository =
   | 'ALL_BY_SELLER_ID'
   | 'FOR_GRAPHIC_BY_SELLER_ID'
   | 'ALL_FOR_STORE'
-  | 'LAST_FIVE_SALES_BY_STORE_ID';
+  | 'LAST_FIVE_SALES_BY_STORE_ID'
+  | 'SALES_BY_SELLER_PER_PERIOD';
 
 type MethodsRepository = MethodsSalesRepository;
 

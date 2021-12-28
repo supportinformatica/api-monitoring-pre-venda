@@ -24,10 +24,24 @@ export interface SeleRepositoryDTO {
   findId: (id: number, storeId: number) => Promise<ISale | undefined>;
   findPurchaseById: (id: number, storeId: number) => Promise<ISale | undefined>;
   findNullSales: () => Promise<ISale[]>;
-  findAllBySellerId: (sellerId: number, storeId: number) => Promise<ISale[]>;
+
   findAllForStore: (storeId: number) => Promise<ISale[]>;
   findLastFiveSalesByStoreId: (storeId: number) => Promise<ISale[]>;
   findInfoByStoreId: (storeId: number, from?: string, to?: string) => Promise<ISale[]>;
+
+  findBySellerPerPeriod: (
+    sellerId: number,
+    storeId: number,
+    from?: string,
+    to?: string
+  ) => Promise<ISale[]>;
+
+  findByCustomerPerPeriod: (
+    sellerId: number,
+    storeId: number,
+    from?: string,
+    to?: string
+  ) => Promise<ISale[]>;
 
   findInfoBySellerId: (
     sellerId: number,

@@ -2,8 +2,6 @@ import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { StoreId } from '@src/modules/common/guard/token';
 import { PeriodSchema } from '@src/modules/common/schemas/period';
-import { CacheService } from '@src/modules/common/services/cache-service';
-import { getKeyName } from '@src/shared/key-name';
 import { PurchaseByIdSchema } from '../schemas/purchase-by-id';
 import { SaleByIdSchema } from '../schemas/sale-by-id';
 import { SaleBySellerSchema } from '../schemas/sale-by-seller';
@@ -14,7 +12,7 @@ import { SaleService } from '../services';
 @ApiTags('vendas')
 @ApiBearerAuth('admin')
 export class SaleController {
-  constructor(private readonly service: SaleService, private readonly cache: CacheService) {}
+  constructor(private readonly service: SaleService) {}
 
   @Get(':id')
   @ApiOkResponse({ type: SaleByIdSchema })
@@ -40,26 +38,12 @@ export class SaleController {
 
   @Get('by-seller/:sellerId')
   @ApiOkResponse({ isArray: true, type: SaleBySellerSchema })
-  public async findAllBySellerId(
+  public async findBySellerPerPeriod(
+    @Query() query: PeriodSchema,
     @Param('sellerId', ParseIntPipe) sellerId: number,
     @StoreId() storeId: number
   ) {
-    const keyName = getKeyName({
-      identifiers: { storeId, sellerId },
-      layer: 'controller',
-      method: 'SALE_ALL_BY_SELLER',
-      module: 'sale'
-    });
-
-    if (await this.cache.has(keyName)) {
-      return this.cache.get(keyName);
-    }
-
-    const sales = await this.service.findAllBySellerId(sellerId, storeId);
-
-    this.cache.set(keyName, sales);
-
-    return sales;
+    return this.service.findBySellerPerPeriod(sellerId, storeId, query.from, query.to);
   }
 
   @Get('by-customer-per-period/:customerId')

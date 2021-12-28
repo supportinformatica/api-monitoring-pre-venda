@@ -4,7 +4,7 @@ import { SaleServiceDTO, FindResponse } from './dtos/sale-service';
 import { formatInfoBySeller } from './helpers/format-info-by-seller';
 import { formatInfoByCustomer } from './helpers/format-info-by-customer';
 import { formatSalePerDay, formatPurchasesPerDay } from './helpers/format-info-per-day';
-import { formatAllBySeller } from './helpers/format-all-by-seller';
+import { formatBySellerPerPeriod } from './helpers/format-all-by-seller';
 import { formatById } from './helpers/format-by-id';
 import { left, right } from '@src/shared/either';
 import { formatByCustomerPerPeriod } from './helpers/format-by-customer-per-period';
@@ -29,8 +29,15 @@ export class SaleService implements SaleServiceDTO {
     return right(formatById(sale));
   }
 
-  public async findAllBySellerId(sellerId: number, storeId: number) {
-    return formatAllBySeller(await this.repository.findAllBySellerId(sellerId, storeId));
+  public async findBySellerPerPeriod(
+    sellerId: number,
+    storeId: number,
+    from?: string,
+    to?: string
+  ) {
+    return formatBySellerPerPeriod(
+      await this.repository.findBySellerPerPeriod(sellerId, storeId, from, to)
+    );
   }
 
   public async findByCustomerPerPeriod(

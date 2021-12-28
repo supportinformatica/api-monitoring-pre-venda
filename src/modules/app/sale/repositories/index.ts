@@ -53,7 +53,19 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .getMany();
   }
 
-  public findAllBySellerId(sellerId: number, storeId: number) {
+  public findBySellerPerPeriod(sellerId: number, storeId: number, from?: string, to?: string) {
+    const queryPeriod = getQueryPeriod(from, to);
+
+    const keyName = getKeyName({
+      identifiers: { storeId },
+      layer: 'repository',
+      method: 'SALES_BY_SELLER_PER_PERIOD',
+      module: 'sale',
+      periods: {
+        fromTo: queryPeriod
+      }
+    });
+
     return this.repository
       .createQueryBuilder()
       .select([
@@ -68,7 +80,9 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .innerJoin('Sale.customer', 'customer')
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
-      .orderBy('Sale.date', 'DESC')
+      .andWhere(queryPeriod.query, queryPeriod.params)
+      .orderBy('Sale.date', 'ASC')
+      .cache(keyName)
       .getMany();
   }
 
