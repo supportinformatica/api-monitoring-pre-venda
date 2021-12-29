@@ -34,6 +34,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .select(['Sale.id', 'Sale.storeId', 'Sale.dateSync'])
       .where('Sale.budgetId IS NULL')
       .andWhere('Sale.storeId <> :storeId', { storeId: 27 })
+      .andWhere('Sale.storeId <> :storeId', { storeId: 75 })
       .getMany();
   }
 
