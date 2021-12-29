@@ -48,8 +48,8 @@ export class SellerController {
       return this.cache.get(keyName);
     }
 
-    const infoSellers = (await this.service.findInfo(storeId)).sort((prev, next) =>
-      prev.seller.name.localeCompare(next.seller.name)
+    const infoSellers = (await this.service.findInfo(storeId)).sort(
+      (prev, next) => prev.ranking - next.ranking
     );
 
     this.cache.set(keyName, infoSellers);
