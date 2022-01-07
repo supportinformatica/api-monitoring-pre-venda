@@ -37,6 +37,17 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .getMany();
   }
 
+  public findNullSalesByStore(storeId: number) {
+    return this.repository
+      .createQueryBuilder()
+      .select(['Sale.id', 'Sale.total', 'Sale.dateSync', 'customer.name'])
+      .innerJoin('Sale.customer', 'customer')
+      .where('Sale.budgetId IS NULL')
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .orderBy('Sale.dateSync', 'DESC')
+      .getMany();
+  }
+
   public findAllForStore(storeId: number) {
     const keyName = getKeyName({
       identifiers: { storeId },

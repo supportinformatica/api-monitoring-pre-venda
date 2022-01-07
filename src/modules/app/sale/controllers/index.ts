@@ -3,6 +3,7 @@ import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nes
 import { StoreId } from '@src/modules/common/guard/token';
 import { PeriodSchema } from '@src/modules/common/schemas/period';
 import { PurchaseByIdSchema } from '../schemas/purchase-by-id';
+import { SaleAndTimeSchema } from '../schemas/sale-and-time';
 import { SaleByIdSchema } from '../schemas/sale-by-id';
 import { SaleBySellerSchema } from '../schemas/sale-by-seller';
 import { PurchaseByCustomerPerPeriod } from '../schemas/sales-by-customer-per-period';
@@ -54,5 +55,11 @@ export class SaleController {
     @StoreId() storeId: number
   ) {
     return this.service.findByCustomerPerPeriod(customerId, storeId, query.from, query.to);
+  }
+
+  @Get('pending/by-store')
+  @ApiOkResponse({ isArray: true, type: SaleAndTimeSchema })
+  public async findPending(@StoreId() storeId: number) {
+    return this.service.findPendingSalesByStore(storeId);
   }
 }
