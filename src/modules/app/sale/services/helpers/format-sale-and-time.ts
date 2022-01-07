@@ -1,4 +1,5 @@
 import { ISale } from '@src/modules/database/interfaces';
+import { IS_PRODUCTION } from '@src/server/settings';
 import { SaleAndTime } from '../../../../app/sale/interfaces/sale-and-time';
 
 function getDays(diff: number) {
@@ -31,8 +32,10 @@ function getSeconds(diff: number) {
 
 function getTime(nullSale: ISale): string {
   const saleDate = new Date(nullSale.dateSync);
+  const zeroOrThreeHours = IS_PRODUCTION ? 10800000 : 0;
+  const now = new Date().valueOf() - zeroOrThreeHours;
 
-  const millisecondsDiff = Math.abs(new Date().valueOf() - saleDate.valueOf());
+  const millisecondsDiff = Math.abs(now - saleDate.valueOf());
 
   if (millisecondsDiff <= 60000) return getSeconds(millisecondsDiff);
 
