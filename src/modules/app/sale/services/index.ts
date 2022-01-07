@@ -8,6 +8,8 @@ import { formatBySellerPerPeriod } from './helpers/format-all-by-seller';
 import { formatById } from './helpers/format-by-id';
 import { left, right } from '@src/shared/either';
 import { formatByCustomerPerPeriod } from './helpers/format-by-customer-per-period';
+import { SaleAndTime } from '../interfaces/sale-and-time';
+import { formatSaleAndTime } from './helpers/format-sale-and-time';
 
 @Injectable()
 export class SaleService implements SaleServiceDTO {
@@ -108,5 +110,13 @@ export class SaleService implements SaleServiceDTO {
 
   public async findLastFiveSalesByStoreId(storeId: number) {
     return (await this.repository.findLastFiveSalesByStoreId(storeId)).slice(0, 5);
+  }
+
+  public async findPendingSalesByStore(storeId: number): Promise<SaleAndTime[]> {
+    const nullSales = await this.repository.findNullSalesByStore(storeId);
+
+    if (!nullSales.length) return [];
+
+    return nullSales.map(sale => formatSaleAndTime(sale));
   }
 }
