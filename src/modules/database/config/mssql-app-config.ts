@@ -16,6 +16,7 @@ export const sqlServerAppConnection: ConnectionOptions = {
   database: Settings.MSSQL_APP_NAME,
   username: Settings.MSSQL_APP_USER,
   password: Settings.MSSQL_APP_PASS,
+  logging: ['error', 'warn'],
   entities: [PATH_ENTITIES],
   cache: {
     type: 'redis',

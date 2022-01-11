@@ -12,9 +12,9 @@ export class CustomSellerRepository implements SellerRepositoryDTO {
   public findInfo(storeId: number) {
     return this.repository
       .createQueryBuilder()
-      .select(['Seller.id', 'Seller.email', 'Seller.name'])
-      .leftJoinAndSelect('Seller.customers', 'customers')
-      .leftJoinAndSelect('Seller.sales', 'sales')
+      .select(['Seller.id', 'Seller.email', 'Seller.name', 'customers.customerId', 'sales.total'])
+      .leftJoin('Seller.customers', 'customers', 'customers.storeId = :storeId', { storeId })
+      .leftJoin('Seller.sales', 'sales', 'sales.storeId = :storeId', { storeId })
       .where('Seller.storeId = :storeId', { storeId })
       .getMany();
   }
