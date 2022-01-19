@@ -24,6 +24,8 @@ export interface SaleServiceDTO {
     to?: string
   ) => Promise<SaleBySeller[]>;
 
+  findByStorePerPeriod: (storeId: number, from?: string, to?: string) => Promise<SaleBySeller[]>;
+
   findInfoByStoreId: (storeId: number, from?: string, to?: string) => Promise<SaleAndInfoBySeller>;
 
   findByCustomerPerPeriod: (

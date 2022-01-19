@@ -14,7 +14,6 @@ export class AdminRepository implements AdminRepositoryDTO {
       .where('Seller.id = :id', { id })
       .andWhere('Seller.storeId = :storeId', { storeId })
       .andWhere('Seller.isActive = :isActive', { isActive: true })
-      .andWhere('Seller.admin = :admin', { admin: true })
       .getOne();
   }
 }

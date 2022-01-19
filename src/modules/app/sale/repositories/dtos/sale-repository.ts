@@ -37,6 +37,8 @@ export interface SeleRepositoryDTO {
     to?: string
   ) => Promise<ISale[]>;
 
+  findByStorePerPeriod: (storeId: number, from?: string, to?: string) => Promise<ISale[]>;
+
   findByCustomerPerPeriod: (
     sellerId: number,
     storeId: number,

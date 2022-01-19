@@ -23,7 +23,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .select(['Sale.id', 'Sale.total', 'customer.id', 'customer.name'])
       .innerJoin('Sale.customer', 'customer')
       .where('Sale.storeId = :storeId', { storeId })
-      .orderBy('Sale.date', 'DESC')
+      .orderBy('Sale.dateSync', 'DESC')
       .cache(keyName)
       .getMany();
   }
@@ -92,7 +92,39 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
-      .orderBy('Sale.date', 'ASC')
+      .orderBy('Sale.dateSync', 'ASC')
+      .cache(keyName)
+      .getMany();
+  }
+
+  public findByStorePerPeriod(storeId: number, from?: string, to?: string) {
+    const queryPeriod = getQueryPeriod(from, to);
+
+    const keyName = getKeyName({
+      identifiers: { storeId },
+      layer: 'repository',
+      method: 'SALES_BY_SELLER_PER_PERIOD',
+      module: 'sale',
+      periods: {
+        fromTo: queryPeriod
+      }
+    });
+
+    return this.repository
+      .createQueryBuilder()
+      .select([
+        'Sale.id',
+        'Sale.total',
+        'Sale.date',
+        'Sale.saleType',
+        'Sale.saleStatus',
+        'customer.id',
+        'customer.name'
+      ])
+      .innerJoin('Sale.customer', 'customer')
+      .where('Sale.storeId = :storeId', { storeId })
+      .andWhere(queryPeriod.query, queryPeriod.params)
+      .orderBy('Sale.dateSync', 'ASC')
       .cache(keyName)
       .getMany();
   }
@@ -125,7 +157,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .where('Sale.customerId = :customerId', { customerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
-      .orderBy('Sale.date', 'ASC')
+      .orderBy('Sale.dateSync', 'ASC')
       .cache(keyName)
       .getMany();
   }
@@ -202,7 +234,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .select(['Sale.date', 'Sale.total'])
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
-      .orderBy('Sale.date', 'ASC')
+      .orderBy('Sale.dateSync', 'ASC')
       .cache(keyName)
       .getMany();
   }
@@ -226,7 +258,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
-      .orderBy('Sale.date', 'ASC')
+      .orderBy('Sale.dateSync', 'ASC')
       .cache(keyName)
       .getMany();
   }
@@ -250,7 +282,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .where('Sale.customerId = :customerId', { customerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
-      .orderBy('Sale.date', 'ASC')
+      .orderBy('Sale.dateSync', 'ASC')
       .cache(keyName)
       .getMany();
   }
@@ -276,7 +308,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .innerJoin('Sale.products', 'products')
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
-      .orderBy('Sale.date', 'ASC')
+      .orderBy('Sale.dateSync', 'ASC')
       .getMany();
 
     return { results, period: { from, to } };
@@ -305,7 +337,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
-      .orderBy('Sale.date', 'ASC')
+      .orderBy('Sale.dateSync', 'ASC')
       .getMany();
 
     return { results, period: { from, to } };
@@ -325,7 +357,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .where('Sale.customerId = :customerId', { customerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
-      .orderBy('Sale.date', 'ASC')
+      .orderBy('Sale.dateSync', 'ASC')
       .getMany();
 
     return { results, period: { from, to } };

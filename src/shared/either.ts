@@ -31,10 +31,10 @@ class Right<L, A> {
 
 export type Either<L, A> = Left<L, A> | Right<L, A>;
 
-export function left<L, A>(l: L): Either<L, A> {
-  return new Left<L, A>(l);
+export function left<L, A>(error: L): Either<L, A> {
+  return new Left<L, A>(error);
 }
 
-export function right<L, A>(a: A): Either<L, A> {
-  return new Right<L, A>(a);
+export function right<L, A>(data: A): Either<L, A> {
+  return new Right<L, A>(data);
 }

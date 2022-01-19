@@ -47,6 +47,12 @@ export class SaleController {
     return this.service.findBySellerPerPeriod(sellerId, storeId, query.from, query.to);
   }
 
+  @Get('by-store/per-period')
+  @ApiOkResponse({ isArray: true, type: SaleBySellerSchema })
+  public async findByStorePerPeriod(@Query() query: PeriodSchema, @StoreId() storeId: number) {
+    return this.service.findByStorePerPeriod(storeId, query.from, query.to);
+  }
+
   @Get('by-customer-per-period/:customerId')
   @ApiOkResponse({ isArray: true, type: PurchaseByCustomerPerPeriod })
   public async findByCustomerPerPeriod(

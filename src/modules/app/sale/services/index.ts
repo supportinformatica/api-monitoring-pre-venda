@@ -42,6 +42,10 @@ export class SaleService implements SaleServiceDTO {
     );
   }
 
+  public async findByStorePerPeriod(storeId: number, from?: string, to?: string) {
+    return formatBySellerPerPeriod(await this.repository.findByStorePerPeriod(storeId, from, to));
+  }
+
   public async findByCustomerPerPeriod(
     customerId: number,
     storeId: number,
