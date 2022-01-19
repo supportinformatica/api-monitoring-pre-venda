@@ -178,12 +178,15 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'product.image',
         'product.defaultImage',
         'customer.id',
-        'customer.name'
+        'customer.name',
+        'seller.id',
+        'seller.name'
       ])
       .innerJoin('Sale.products', 'products')
       .innerJoin('products.product', 'product')
       .innerJoin('Sale.customer', 'customer')
       .innerJoin('Sale.paymentMethod', 'paymentMethod')
+      .innerJoin('Sale.seller', 'seller')
       .where('Sale.id = :id', { id })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .getOne();

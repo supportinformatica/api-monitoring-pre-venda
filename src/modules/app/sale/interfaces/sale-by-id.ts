@@ -15,6 +15,11 @@ export interface SaleByIdPayment {
   name: string;
 }
 
+export interface SellerSaleById {
+  id: number;
+  name: string;
+}
+
 export interface SaleById {
   date: string;
   total: number;
@@ -22,5 +27,6 @@ export interface SaleById {
   observation: string;
   products: SaleByIdProducts[];
   customer: ICustomerSchema;
+  seller: SellerSaleById;
   paymentMethod: SaleByIdPayment;
 }
