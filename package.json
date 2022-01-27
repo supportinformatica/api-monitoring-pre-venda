@@ -6,7 +6,9 @@
   "author": "iago fagundes <iago.fagundes@outlook.com>",
   "license": "MIT",
   "engines": {
-    "node": "16.13.2"
+    "node": "16.13.2",
+    "npm": "8.1.2",
+    "yarn": "1.22.15"
   },
   "scripts": {
     "prebuild": "rimraf dist",
