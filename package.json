@@ -5,6 +5,9 @@
   "repository": "https://github.com/iago-f-s-e/api-monitoring-pre-venda.git",
   "author": "iago fagundes <iago.fagundes@outlook.com>",
   "license": "MIT",
+  "engines": {
+    "node": "16.13.2"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
