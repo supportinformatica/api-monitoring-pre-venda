@@ -85,7 +85,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere('Sale.dateSync BETWEEN :from AND :to', { from, to })
-      .orderBy('Sale.dateSync', 'ASC')
+      .orderBy('Sale.dateSync', 'DESC')
       .getMany();
   }
 
