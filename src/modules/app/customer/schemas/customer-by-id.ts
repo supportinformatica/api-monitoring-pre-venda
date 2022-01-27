@@ -47,4 +47,10 @@ export class CustomerByIdSchema implements CustomerById {
 
   @ApiProperty({ type: 'boolean' })
   public readonly hasRestriction!: boolean;
+
+  @ApiProperty({ type: 'boolean' })
+  public readonly cashPaymentOnly!: boolean;
+
+  @ApiProperty({ type: 'number' })
+  public readonly hasInstallments!: number;
 }
