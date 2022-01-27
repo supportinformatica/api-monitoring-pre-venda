@@ -136,6 +136,11 @@ export class SellerController {
     return saleGraphic;
   }
 
+  @Get(':id/time-line')
+  public async findTimeLine(@Param('id', ParseIntPipe) id: number, @StoreId() storeId: number) {
+    return this.service.findTimeLine(id, storeId);
+  }
+
   @Get(':id/sales-summary-per-day')
   @ApiOkResponse({ type: SalePerDaySchema })
   @ApiBadRequestResponse({ description: '"Invalid day format" or "Out range day"' })

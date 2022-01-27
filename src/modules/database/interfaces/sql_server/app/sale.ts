@@ -23,6 +23,8 @@ export interface ISale {
   concluded: boolean;
   deleted: boolean;
   saleType: SaleType;
+  lat: string;
+  long: string;
 
   products: ISaleProduct[];
   customer: ICustomer;

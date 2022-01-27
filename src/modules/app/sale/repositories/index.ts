@@ -64,6 +64,31 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .getMany();
   }
 
+  public findTimeLine(
+    storeId: number,
+    sellerId: number,
+    from: string,
+    to: string
+  ): Promise<Sale[]> {
+    return this.repository
+      .createQueryBuilder()
+      .select([
+        'Sale.id',
+        'Sale.total',
+        'Sale.dateSync',
+        'Sale.lat',
+        'Sale.long',
+        'customer.id',
+        'customer.name'
+      ])
+      .innerJoin('Sale.customer', 'customer')
+      .where('Sale.sellerId = :sellerId', { sellerId })
+      .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere('Sale.dateSync BETWEEN :from AND :to', { from, to })
+      .orderBy('Sale.dateSync', 'ASC')
+      .getMany();
+  }
+
   public findBySellerPerPeriod(sellerId: number, storeId: number, from?: string, to?: string) {
     const queryPeriod = getQueryPeriod(from, to);
 

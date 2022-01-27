@@ -1,5 +1,6 @@
 import { AfterLoad, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { DocumentType, ICustomer } from '../../../interfaces/sql_server/app/customer';
+import { Installments } from './installments';
 import { Sale } from './sale';
 import { SellerCustomer } from './seller-customer';
 
@@ -53,8 +54,17 @@ export class Customer implements ICustomer {
   @Column({ type: 'bit', name: 'isAtacadista' })
   public readonly isWholesale!: boolean;
 
+  @Column({ type: 'bit', name: 'somenteAVista' })
+  public readonly cashPaymentOnly!: boolean;
+
   @Column({ type: 'bit', name: 'clienteRestricao' })
   public readonly hasRestriction!: boolean;
+
+  @Column({ type: 'integer', name: 'parcelaAtrasada' })
+  public readonly hasInstallments!: number;
+
+  @OneToMany(() => Installments, installments => installments.customer)
+  public readonly installments!: Installments[];
 
   @OneToMany(() => SellerCustomer, sellers => sellers.customer)
   public readonly sellers!: SellerCustomer[];

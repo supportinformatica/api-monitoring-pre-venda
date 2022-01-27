@@ -10,16 +10,12 @@ export class CustomCustomerRepository implements CustomerRepositoryDTO {
   constructor(@InjectRepository(Customer) private readonly repository: Repository<Customer>) {}
 
   public findInfo(storeId: number) {
-    // TODO: change leftJoin
-    return (
-      this.repository
-        .createQueryBuilder()
-        .select(['Customer.id', 'Customer.name', 'sales.total'])
-        // .leftJoin('Customer.sales', 'sales', 'sales.concluded = :concluded', { concluded: true })
-        .leftJoin('Customer.sales', 'sales')
-        .where('Customer.storeId = :storeId', { storeId })
-        .getMany()
-    );
+    return this.repository
+      .createQueryBuilder()
+      .select(['Customer.id', 'Customer.name', 'sales.total'])
+      .leftJoin('Customer.sales', 'sales')
+      .where('Customer.storeId = :storeId', { storeId })
+      .getMany();
   }
 
   public findAllForStore(storeId: number) {
@@ -56,8 +52,16 @@ export class CustomCustomerRepository implements CustomerRepositoryDTO {
         'Customer.zipCode',
         'Customer.complement',
         'Customer.isWholesale',
-        'Customer.hasRestriction'
+        'Customer.hasRestriction',
+        'Customer.hasInstallments',
+        'Customer.cashPaymentOnly',
+        'installments.id',
+        'installments.document',
+        'installments.value',
+        'installments.discount',
+        'installments.dueDate'
       ])
+      .leftJoin('Customer.installments', 'installments')
       .where('Customer.id = :id', { id })
       .andWhere('Customer.storeId = :storeId', { storeId })
       .getOne();

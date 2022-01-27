@@ -1,3 +1,4 @@
+import { IInstallments } from './installments';
 import { ISale } from './sale';
 import { ISellerCustomer } from './seller-customer';
 
@@ -20,8 +21,11 @@ export interface ICustomer {
   zipCode: string;
   complement: string;
   isWholesale: boolean;
+  cashPaymentOnly: boolean;
   hasRestriction: boolean;
+  hasInstallments: number;
 
+  installments: IInstallments[];
   sellers: ISellerCustomer[];
   sales: ISale[];
 }

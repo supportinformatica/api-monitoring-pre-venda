@@ -60,6 +60,12 @@ export class Sale implements ISale {
   @Column({ type: 'integer', name: 'situacaoApp' })
   public readonly saleStatus!: SaleStatus;
 
+  @Column({ type: 'varchar', name: 'latitude' })
+  public readonly lat!: string;
+
+  @Column({ type: 'varchar', name: 'longitude' })
+  public readonly long!: string;
+
   @OneToMany(() => SaleProduct, products => products.sale)
   public readonly products!: SaleProduct[];
 

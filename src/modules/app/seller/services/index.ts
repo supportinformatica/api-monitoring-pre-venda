@@ -1,13 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ISale, ISeller } from '@src/modules/database/interfaces';
 import { left, right } from '@src/shared/either';
+import { CustomSaleRepository } from '../../sale/repositories';
 import { ISellerAndInfo } from '../interfaces/seller-and-info';
+import { TimeLine } from '../interfaces/time-line';
 import { CustomSellerRepository } from '../repositories';
 import { SellerServiceDTO, FindResponse } from './dtos/seller-service';
+import { formatTimeLine } from './helpers/format-time-line';
 
 @Injectable()
 export class SellerService implements SellerServiceDTO {
-  constructor(private readonly repository: CustomSellerRepository) {}
+  constructor(
+    private readonly repository: CustomSellerRepository,
+    private readonly saleRepository: CustomSaleRepository
+  ) {}
 
   private getTotalValue(sales: ISale[]): number {
     if (!sales.length) return 0;
@@ -37,6 +43,15 @@ export class SellerService implements SellerServiceDTO {
       totalValue,
       ranking: 0
     };
+  }
+
+  public async findTimeLine(id: number, storeId: number): Promise<TimeLine> {
+    const [usDate] = new Date().toISOString().split('T');
+
+    const from = new Date(`${usDate} 00:00:00`).toISOString();
+    const to = new Date().toISOString();
+
+    return formatTimeLine(await this.saleRepository.findTimeLine(storeId, id, from, to));
   }
 
   public async findInfo(storeId: number) {

@@ -1,4 +1,5 @@
 import { ILastUpdate, ISale } from '@src/modules/database/interfaces';
+import { IS_PRODUCTION } from '@src/server/settings';
 import { IdsAndQuantity } from '../../interfaces/ids-and-quantity';
 import { WarnLastUpdate } from '../../interfaces/warn-last-update';
 
@@ -8,27 +9,30 @@ function getIds(
 ): { warnSyncIds: number[]; warnSaleIds: number[] } {
   const warnSyncIds: number[] = [];
   const warnSaleIds: number[] = [];
+  const zeroOrThreeHours = IS_PRODUCTION ? 10800000 : 0;
+  const now = new Date().valueOf() - zeroOrThreeHours;
 
   for (const nullSale of nullSales) {
     const lastSync = lastSyncs.find(({ storeId }) => storeId === nullSale.storeId);
-
     if (!lastSync) continue;
 
     const syncDate = new Date(lastSync.date);
     const saleDate = new Date(nullSale.dateSync);
 
-    const millisecondsDiff = Math.abs(syncDate.valueOf() - saleDate.valueOf());
-    const minutesDiff = millisecondsDiff / 1000 / 60;
+    const diffSync = Math.abs(syncDate.valueOf() - now);
+    const diffSale = Math.abs(syncDate.valueOf() - saleDate.valueOf());
+    const minutesSaleDiff = diffSale / 1000 / 60;
+    const minutesSyncDiff = diffSync / 1000 / 60;
 
-    if (minutesDiff < 30) continue;
-
-    if (syncDate > saleDate) {
-      warnSaleIds.push(nullSale.storeId);
+    if (minutesSyncDiff >= 30) {
+      warnSyncIds.push(lastSync.storeId);
 
       continue;
     }
 
-    warnSyncIds.push(lastSync.storeId);
+    if (minutesSaleDiff < 10) continue;
+
+    warnSaleIds.push(nullSale.storeId);
   }
 
   return { warnSaleIds, warnSyncIds };
