@@ -66,6 +66,9 @@ export class Sale implements ISale {
   @Column({ type: 'varchar', name: 'longitude' })
   public readonly long!: string;
 
+  @Column({ type: 'varchar', name: 'dtCriacao' })
+  public readonly createdAt!: string;
+
   @OneToMany(() => SaleProduct, products => products.sale)
   public readonly products!: SaleProduct[];
 

@@ -25,6 +25,7 @@ export interface ISale {
   saleType: SaleType;
   lat: string;
   long: string;
+  createdAt: string;
 
   products: ISaleProduct[];
   customer: ICustomer;

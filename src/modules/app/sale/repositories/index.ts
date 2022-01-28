@@ -75,7 +75,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .select([
         'Sale.id',
         'Sale.total',
-        'Sale.dateSync',
+        'Sale.createdAt',
         'Sale.lat',
         'Sale.long',
         'customer.id',
@@ -84,8 +84,8 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .innerJoin('Sale.customer', 'customer')
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
-      .andWhere('Sale.dateSync BETWEEN :from AND :to', { from, to })
-      .orderBy('Sale.dateSync', 'DESC')
+      .andWhere('Sale.createdAt BETWEEN :from AND :to', { from, to })
+      .orderBy('Sale.createdAt', 'DESC')
       .getMany();
   }
 

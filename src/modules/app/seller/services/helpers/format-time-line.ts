@@ -2,8 +2,8 @@ import { ISale } from '@src/modules/database/interfaces';
 import { SaleTimeLine, TimeLine } from '../../interfaces/time-line';
 
 function formatSales(sales: ISale[]): SaleTimeLine[] {
-  return sales.map(({ id, customer, total, dateSync, lat, long }) => {
-    const [time] = new Date(dateSync).toTimeString().split(' ');
+  return sales.map(({ id, customer, total, createdAt, lat, long }) => {
+    const [time] = new Date(createdAt).toTimeString().split(' ');
 
     return {
       id,
