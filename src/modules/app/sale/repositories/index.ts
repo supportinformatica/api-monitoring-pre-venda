@@ -21,7 +21,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
     return this.repository
       .createQueryBuilder()
       .select(['Sale.id', 'Sale.total', 'customer.id', 'customer.name'])
-      .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.customer', 'customer', 'customer.storeId = :storeId', { storeId })
       .where('Sale.storeId = :storeId', { storeId })
       .orderBy('Sale.dateSync', 'DESC')
       .cache(keyName)
@@ -41,7 +41,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
     return this.repository
       .createQueryBuilder()
       .select(['Sale.id', 'Sale.total', 'Sale.dateSync', 'customer.name'])
-      .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.customer', 'customer', 'customer.storeId = :storeId', { storeId })
       .where('Sale.budgetId IS NULL')
       .andWhere('Sale.storeId = :storeId', { storeId })
       .orderBy('Sale.dateSync', 'DESC')
@@ -81,7 +81,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'customer.id',
         'customer.name'
       ])
-      .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.customer', 'customer', 'customer.storeId = :storeId', { storeId })
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere('Sale.createdAt BETWEEN :from AND :to', { from, to })
@@ -113,7 +113,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'customer.id',
         'customer.name'
       ])
-      .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.customer', 'customer', 'customer.storeId = :storeId', { storeId })
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
@@ -146,7 +146,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'customer.id',
         'customer.name'
       ])
-      .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.customer', 'customer', 'customer.storeId = :storeId', { storeId })
       .where('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
       .orderBy('Sale.dateSync', 'ASC')
@@ -178,7 +178,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'seller.id',
         'seller.name'
       ])
-      .innerJoin('Sale.seller', 'seller')
+      .innerJoin('Sale.seller', 'seller', 'seller.storeId = :storeId', { storeId })
       .where('Sale.customerId = :customerId', { customerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
@@ -207,11 +207,11 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'seller.id',
         'seller.name'
       ])
-      .innerJoin('Sale.products', 'products')
-      .innerJoin('products.product', 'product')
-      .innerJoin('Sale.customer', 'customer')
+      .innerJoin('Sale.products', 'products', 'products.storeId = :storeId', { storeId })
+      .innerJoin('products.product', 'product', 'product.storeId = :storeId', { storeId })
+      .innerJoin('Sale.customer', 'customer', 'customer.storeId = :storeId', { storeId })
+      .innerJoin('Sale.seller', 'seller', 'seller.storeId = :storeId', { storeId })
       .innerJoin('Sale.paymentMethod', 'paymentMethod')
-      .innerJoin('Sale.seller', 'seller')
       .where('Sale.id = :id', { id })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .getOne();
@@ -235,9 +235,9 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'seller.id',
         'seller.name'
       ])
-      .innerJoin('Sale.products', 'products')
-      .innerJoin('products.product', 'product')
-      .innerJoin('Sale.seller', 'seller')
+      .innerJoin('Sale.products', 'products', 'products.storeId = :storeId', { storeId })
+      .innerJoin('products.product', 'product', 'product.storeId = :storeId', { storeId })
+      .innerJoin('Sale.seller', 'seller', 'seller.storeId = :storeId', { storeId })
       .innerJoin('Sale.paymentMethod', 'paymentMethod')
       .where('Sale.id = :id', { id })
       .andWhere('Sale.storeId = :storeId', { storeId })
@@ -332,8 +332,8 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'customer.id',
         'customer.name'
       ])
-      .innerJoin('Sale.customer', 'customer')
-      .innerJoin('Sale.products', 'products')
+      .innerJoin('Sale.customer', 'customer', 'customer.storeId = :storeId', { storeId })
+      .innerJoin('Sale.products', 'products', 'products.storeId = :storeId', { storeId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)
       .orderBy('Sale.dateSync', 'ASC')
@@ -360,8 +360,8 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'customer.id',
         'customer.name'
       ])
-      .innerJoin('Sale.customer', 'customer')
-      .innerJoin('Sale.products', 'products')
+      .innerJoin('Sale.customer', 'customer', 'customer.storeId = :storeId', { storeId })
+      .innerJoin('Sale.products', 'products', 'products.storeId = :storeId', { storeId })
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
       .andWhere(queryPeriod.query, queryPeriod.params)

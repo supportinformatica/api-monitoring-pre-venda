@@ -13,7 +13,7 @@ export class CustomCustomerRepository implements CustomerRepositoryDTO {
     return this.repository
       .createQueryBuilder()
       .select(['Customer.id', 'Customer.name', 'sales.total'])
-      .leftJoin('Customer.sales', 'sales')
+      .leftJoin('Customer.sales', 'sales', 'sales.storeId = :storeId', { storeId })
       .where('Customer.storeId = :storeId', { storeId })
       .getMany();
   }
@@ -61,7 +61,9 @@ export class CustomCustomerRepository implements CustomerRepositoryDTO {
         'installments.discount',
         'installments.dueDate'
       ])
-      .leftJoin('Customer.installments', 'installments')
+      .leftJoin('Customer.installments', 'installments', 'installments.storeId = :storeId', {
+        storeId
+      })
       .where('Customer.id = :id', { id })
       .andWhere('Customer.storeId = :storeId', { storeId })
       .getOne();
