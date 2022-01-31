@@ -1,19 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Seller } from '@src/modules/database/models';
+import { Seller, SellerCustomer } from '@src/modules/database/models';
 import { getKeyName } from '@src/shared/key-name';
 import { Repository } from 'typeorm';
 import { SellerRepositoryDTO } from './dtos/seller-repository';
 
 @Injectable()
 export class CustomSellerRepository implements SellerRepositoryDTO {
-  constructor(@InjectRepository(Seller) private readonly repository: Repository<Seller>) {}
+  constructor(
+    @InjectRepository(Seller) private readonly repository: Repository<Seller>,
+    @InjectRepository(SellerCustomer)
+    private readonly customers: Repository<SellerCustomer>
+  ) {}
+
+  public findCustomers(storeId: number) {
+    return this.customers
+      .createQueryBuilder()
+      .where('SellerCustomer.storeId = :storeId', { storeId })
+      .getMany();
+  }
 
   public findInfo(storeId: number) {
     return this.repository
       .createQueryBuilder()
-      .select(['Seller.id', 'Seller.email', 'Seller.name', 'customers.customerId', 'sales.total'])
-      .leftJoin('Seller.customers', 'customers', 'customers.storeId = :storeId', { storeId })
+      .select(['Seller.id', 'Seller.email', 'Seller.name', 'sales.total'])
       .leftJoin('Seller.sales', 'sales', 'sales.storeId = :storeId', { storeId })
       .where('Seller.storeId = :storeId', { storeId })
       .getMany();
