@@ -53,11 +53,21 @@ export class SellerService implements SellerServiceDTO {
 
     return formatTimeLine(await this.saleRepository.findTimeLine(storeId, id, from, to));
   }
-
   public async findInfo(storeId: number) {
-    return this.getRanking(
-      (await this.repository.findInfo(storeId)).map(seller => this.getInfo(seller))
-    );
+    let sellers = await this.repository.findInfo(storeId);
+
+    const allCustomers = await this.repository.findCustomers(storeId);
+
+    sellers = sellers.map(seller => {
+      const customers = allCustomers.filter(({ sellerId }) => sellerId === seller.id);
+
+      return {
+        ...seller,
+        customers
+      };
+    });
+
+    return this.getRanking(sellers.map(seller => this.getInfo(seller)));
   }
 
   public async findById(id: number, storeId: number): Promise<FindResponse> {
