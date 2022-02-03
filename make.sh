@@ -40,7 +40,7 @@ if [ "$results" == "y" ] || [ "$results" == "Y" ]
     echo >> .env
     echo "### Redis config ###" >> .env
     echo "REDIS_HOST=localhost" >> .env
-    echo "REDIS_PORT=27017" >> .env
+    echo "REDIS_PORT=6379" >> .env
 
 else 
   echo ""
