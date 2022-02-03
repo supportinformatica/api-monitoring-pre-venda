@@ -13,7 +13,15 @@ export class CustomCustomerRepository implements CustomerRepositoryDTO {
     return this.repository
       .createQueryBuilder()
       .select(['Customer.id', 'Customer.name', 'sales.total'])
-      .leftJoin('Customer.sales', 'sales', 'sales.storeId = :storeId', { storeId })
+      .leftJoin(
+        'Customer.sales',
+        'sales',
+        'sales.storeId = :storeId and sales.deleted = :deleted',
+        {
+          storeId,
+          deleted: false
+        }
+      )
       .where('Customer.storeId = :storeId', { storeId })
       .getMany();
   }
