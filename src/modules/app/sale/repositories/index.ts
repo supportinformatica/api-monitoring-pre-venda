@@ -23,6 +23,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .select(['Sale.id', 'Sale.total', 'customer.id', 'customer.name'])
       .innerJoin('Sale.customer', 'customer', 'customer.storeId = :storeId', { storeId })
       .where('Sale.storeId = :storeId', { storeId })
+      .andWhere('Sale.deleted = :deleted', { deleted: false })
       .orderBy('Sale.dateSync', 'DESC')
       .cache(keyName)
       .getMany();
@@ -60,6 +61,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .createQueryBuilder()
       .select(['Sale.total'])
       .where('Sale.storeId = :storeId', { storeId })
+      .andWhere('Sale.deleted = :deleted', { deleted: false })
       .cache(keyName)
       .getMany();
   }
@@ -260,7 +262,8 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
     return this.repository
       .createQueryBuilder()
       .select(['Sale.date', 'Sale.total'])
-      .andWhere('Sale.storeId = :storeId', { storeId })
+      .where('Sale.storeId = :storeId', { storeId })
+      .andWhere('Sale.deleted = :deleted', { deleted: false })
       .andWhere(queryPeriod.query, queryPeriod.params)
       .orderBy('Sale.dateSync', 'ASC')
       .cache(keyName)
@@ -285,6 +288,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .select(['Sale.date', 'Sale.total'])
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere('Sale.deleted = :deleted', { deleted: false })
       .andWhere(queryPeriod.query, queryPeriod.params)
       .orderBy('Sale.dateSync', 'ASC')
       .cache(keyName)
@@ -309,6 +313,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .select(['Sale.date', 'Sale.total'])
       .where('Sale.customerId = :customerId', { customerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere('Sale.deleted = :deleted', { deleted: false })
       .andWhere(queryPeriod.query, queryPeriod.params)
       .orderBy('Sale.dateSync', 'ASC')
       .cache(keyName)
@@ -334,7 +339,8 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       ])
       .innerJoin('Sale.customer', 'customer', 'customer.storeId = :storeId', { storeId })
       .innerJoin('Sale.products', 'products', 'products.storeId = :storeId', { storeId })
-      .andWhere('Sale.storeId = :storeId', { storeId })
+      .where('Sale.storeId = :storeId', { storeId })
+      .andWhere('Sale.deleted = :deleted', { deleted: false })
       .andWhere(queryPeriod.query, queryPeriod.params)
       .orderBy('Sale.dateSync', 'ASC')
       .getMany();
@@ -364,6 +370,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .innerJoin('Sale.products', 'products', 'products.storeId = :storeId', { storeId })
       .where('Sale.sellerId = :sellerId', { sellerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere('Sale.deleted = :deleted', { deleted: false })
       .andWhere(queryPeriod.query, queryPeriod.params)
       .orderBy('Sale.dateSync', 'ASC')
       .getMany();
@@ -384,6 +391,7 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
       .select(['Sale.date', 'Sale.total'])
       .where('Sale.customerId = :customerId', { customerId })
       .andWhere('Sale.storeId = :storeId', { storeId })
+      .andWhere('Sale.deleted = :deleted', { deleted: false })
       .andWhere(queryPeriod.query, queryPeriod.params)
       .orderBy('Sale.dateSync', 'ASC')
       .getMany();
