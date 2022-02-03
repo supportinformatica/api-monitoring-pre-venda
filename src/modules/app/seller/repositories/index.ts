@@ -24,7 +24,7 @@ export class CustomSellerRepository implements SellerRepositoryDTO {
     return this.repository
       .createQueryBuilder()
       .select(['Seller.id', 'Seller.email', 'Seller.name', 'sales.total'])
-      .leftJoin('Seller.sales', 'sales', 'sales.storeId = :storeId and sale.deleted = :deleted', {
+      .leftJoin('Seller.sales', 'sales', 'sales.storeId = :storeId and sales.deleted = :deleted', {
         storeId,
         deleted: false
       })
