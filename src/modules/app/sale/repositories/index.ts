@@ -111,7 +111,8 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'Sale.total',
         'Sale.date',
         'Sale.saleType',
-        'Sale.saleStatus',
+        'Sale.concluded',
+        'Sale.deleted',
         'customer.id',
         'customer.name'
       ])
@@ -144,7 +145,8 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'Sale.total',
         'Sale.date',
         'Sale.saleType',
-        'Sale.saleStatus',
+        'Sale.concluded',
+        'Sale.deleted',
         'customer.id',
         'customer.name'
       ])
@@ -176,7 +178,8 @@ export class CustomSaleRepository implements SeleRepositoryDTO {
         'Sale.total',
         'Sale.date',
         'Sale.saleType',
-        'Sale.saleStatus',
+        'Sale.concluded',
+        'Sale.deleted',
         'seller.id',
         'seller.name'
       ])
