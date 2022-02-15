@@ -84,11 +84,21 @@ export class Sale implements ISale {
   @JoinColumn({ name: 'vendedor_id', referencedColumnName: 'id' })
   public readonly seller!: Seller;
 
+  private getStatus(concluded: boolean, deleted: boolean): SaleStatus {
+    if (deleted) return 3;
+
+    if (concluded) return 2;
+
+    return 1;
+  }
+
   @AfterLoad()
   protected formatValues(): void {
     const total = this.total ? parseFloat((this.total * 100).toFixed(2)) : undefined;
     const discount = this.discount ? parseFloat((this.discount * 100).toFixed(2)) : undefined;
 
-    Object.assign(this, { total, discount });
+    const saleStatus = this.getStatus(this.concluded, this.deleted);
+
+    Object.assign(this, { total, discount, saleStatus });
   }
 }
