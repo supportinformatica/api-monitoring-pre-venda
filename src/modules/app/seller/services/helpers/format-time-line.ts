@@ -6,17 +6,9 @@ import { SaleTimeLine, TimeLine } from '../../interfaces/time-line';
 function getLabelDistance(total: number): string {
   const oneKilometer = 1000;
 
-  const meters = total % oneKilometer;
-  const kilometers = (total - meters) / oneKilometer;
+  const kilometers = Math.round(total / oneKilometer);
 
-  const metersPrefix = meters > 1 ? 'metros' : 'metro';
-
-  const kilometersLabel = `${kilometers} km`;
-  const metersLabel = `${meters} ${metersPrefix}`;
-
-  if (!meters) return kilometersLabel;
-
-  return `${kilometersLabel} e ${metersLabel}`;
+  return `${kilometers} km`;
 }
 
 async function getDistance(sales: SaleTimeLine[]) {
