@@ -11,6 +11,10 @@ function getLabelDistance(total: number): string {
   return `${kilometers} km`;
 }
 
+function getTotal(sales: SaleTimeLine[]): number {
+  return getSum(sales.map(({ total }) => total));
+}
+
 async function getDistance(sales: SaleTimeLine[]) {
   if (!sales.length) return '0 km';
 
@@ -56,7 +60,8 @@ function formatSales(sales: ISale[]): SaleTimeLine[] {
 
 export async function formatTimeLine(data: ISale[]): Promise<TimeLine> {
   const sales = formatSales(data);
+  const total = getTotal(sales);
   const distance = await getDistance(sales);
 
-  return { sales, distance };
+  return { distance, total, sales };
 }

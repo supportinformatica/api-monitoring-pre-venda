@@ -9,4 +9,5 @@ export interface SaleTimeLine {
 export interface TimeLine {
   sales: SaleTimeLine[];
   distance: string;
+  total: number;
 }
