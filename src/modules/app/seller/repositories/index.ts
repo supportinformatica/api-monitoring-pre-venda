@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Seller, SellerCustomer } from '@src/modules/database/models';
 import { getKeyName } from '@src/shared/key-name';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
+import { Settings } from '../interfaces/settings';
 import { SellerRepositoryDTO } from './dtos/seller-repository';
 
 @Injectable()
@@ -12,6 +13,14 @@ export class CustomSellerRepository implements SellerRepositoryDTO {
     @InjectRepository(SellerCustomer)
     private readonly customers: Repository<SellerCustomer>
   ) {}
+
+  public changeMaxDiscount(id: number, storeId: number, discount: number): Promise<UpdateResult> {
+    return this.repository.update({ id, storeId }, { maxDiscount: discount });
+  }
+
+  public toggleSettings(id: number, storeId: number, settings: Settings): Promise<UpdateResult> {
+    return this.repository.update({ id, storeId }, settings);
+  }
 
   public findCustomers(storeId: number) {
     return this.customers
@@ -36,6 +45,15 @@ export class CustomSellerRepository implements SellerRepositoryDTO {
     return this.repository
       .createQueryBuilder()
       .select(['Seller.id', 'Seller.email', 'Seller.name'])
+      .where('Seller.id = :id', { id })
+      .andWhere('Seller.storeId = :storeId', { storeId })
+      .getOne();
+  }
+
+  public findSettings(id: number, storeId: number) {
+    return this.repository
+      .createQueryBuilder()
+      .select(['Seller.canChangePrice', 'Seller.useWallet', 'Seller.maxDiscount'])
       .where('Seller.id = :id', { id })
       .andWhere('Seller.storeId = :storeId', { storeId })
       .getOne();

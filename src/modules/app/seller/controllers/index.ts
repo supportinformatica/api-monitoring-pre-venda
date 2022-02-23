@@ -1,4 +1,14 @@
-import { BadRequestException, Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Put,
+  Query
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -20,6 +30,17 @@ import { GraphicService } from '../../graphic/services';
 import { PeriodOptionsSchema } from '../../../common/schemas/period-options-schema';
 import { getTypePeriod } from '../../../common/helpers';
 import { SaleGraphicBySellerSchema } from '../../graphic/schemas/sale-graphic-by-seller';
+
+export type SettingEndPoint = 'can-change-price' | 'use-wallet';
+
+type BodySettings = {
+  discount: number;
+};
+
+enum SettingsProperties {
+  'can-change-price' = 'canChangePrice',
+  'use-wallet' = 'useWallet'
+}
 
 @Controller('sellers')
 @ApiTags('vendedores')
@@ -139,6 +160,48 @@ export class SellerController {
   @Get(':id/time-line')
   public async findTimeLine(@Param('id', ParseIntPipe) id: number, @StoreId() storeId: number) {
     return this.service.findTimeLine(id, storeId);
+  }
+
+  @Get(':id/settings')
+  public async findSettings(@Param('id', ParseIntPipe) id: number, @StoreId() storeId: number) {
+    const settingsOrError = await this.service.findSettings(id, storeId);
+
+    if (settingsOrError.isLeft()) throw settingsOrError.value;
+
+    return settingsOrError.value;
+  }
+
+  @Put(':id/settings')
+  public async updateSettings(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: BodySettings,
+    @StoreId() storeId: number
+  ) {
+    if (!new Object(body).hasOwnProperty('discount'))
+      throw new BadRequestException('Discount is missing');
+
+    const settingsOrError = await this.service.changeMaxDiscount(id, storeId, body.discount);
+
+    if (settingsOrError.isLeft()) throw settingsOrError.value;
+
+    return settingsOrError.value;
+  }
+
+  @Patch(':id/settings/toggle/:setting')
+  public async toggleSettings(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('setting') setting: SettingEndPoint,
+    @StoreId() storeId: number
+  ) {
+    const settingProperty = SettingsProperties[setting];
+
+    if (!settingProperty) throw new BadRequestException('Setting is invalid');
+
+    const settingsOrError = await this.service.toggleSetting(id, storeId, settingProperty);
+
+    if (settingsOrError.isLeft()) throw settingsOrError.value;
+
+    return settingsOrError.value;
   }
 
   @Get(':id/sales-summary-per-day')
