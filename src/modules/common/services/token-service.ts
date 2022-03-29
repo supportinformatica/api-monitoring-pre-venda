@@ -5,6 +5,7 @@ import { InvalidTokenError } from '../errors/invalid-token';
 import { IAuthorizedAdmin, TokenServiceDTO, VerifyTokenResponse } from './dtos/token-service';
 
 interface VerifiedToken {
+  id: number;
   sub: string;
   iat: number;
   exp: number;
@@ -20,12 +21,12 @@ export class TokenService implements TokenServiceDTO {
     const [_, token] = accessToken.split(' ');
 
     try {
-      const { sub } = this.jwtService.verify(token) as VerifiedToken;
+      const { id, sub } = this.jwtService.verify(token) as VerifiedToken;
 
       if (Number.isNaN(Number(sub))) return left(new InvalidTokenError(accessToken));
 
       const payload: IAuthorizedAdmin = {
-        id: parseInt(sub)
+        id: id || parseInt(sub)
       };
 
       return right(payload);
