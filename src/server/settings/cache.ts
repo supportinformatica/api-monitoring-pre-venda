@@ -8,6 +8,6 @@ export const REDIS_TIMEOUT = 1000 * 60 * 60; // 10seg
 
 export const REDIS_EXPIRATION_TIME = 1000 * 30;
 
-export const REDIS_EX_MODE = 'ex'; // seconds
+export const REDIS_EX_MODE = 'EX'; // seconds
 
-export const REDIS_PX_MODE = 'px'; // milliseconds
+export const REDIS_PX_MODE = 'PX'; // milliseconds
