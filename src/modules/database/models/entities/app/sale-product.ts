@@ -1,4 +1,4 @@
-import { AfterLoad, Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ISaleProduct } from '../../../interfaces/sql_server/app/sale-product';
 import { Product } from './product';
 import { Sale } from './sale';
@@ -33,12 +33,4 @@ export class SaleProduct implements ISaleProduct {
   @ManyToOne(() => Sale, sale => sale.products)
   @JoinColumn({ name: 'pedidoVenda_id', referencedColumnName: 'id' })
   public readonly sale!: Sale;
-
-  @AfterLoad()
-  protected formatValues(): void {
-    const grossValue = this.grossValue ? parseFloat((this.grossValue * 100).toFixed(2)) : undefined;
-    const netValue = this.netValue ? parseFloat((this.netValue * 100).toFixed(2)) : undefined;
-
-    Object.assign(this, { grossValue, netValue });
-  }
 }

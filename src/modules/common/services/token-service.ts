@@ -23,8 +23,6 @@ export class TokenService implements TokenServiceDTO {
     try {
       const { id, sub } = this.jwtService.verify(token) as VerifiedToken;
 
-      if (Number.isNaN(Number(sub))) return left(new InvalidTokenError(accessToken));
-
       const payload: IAuthorizedAdmin = {
         id: id || parseInt(sub)
       };
