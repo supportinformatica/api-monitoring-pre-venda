@@ -94,11 +94,8 @@ export class Sale implements ISale {
 
   @AfterLoad()
   protected formatValues(): void {
-    const total = this.total ? parseFloat((this.total * 100).toFixed(2)) : undefined;
-    const discount = this.discount ? parseFloat((this.discount * 100).toFixed(2)) : undefined;
-
     const saleStatus = this.getStatus(this.concluded, this.deleted);
 
-    Object.assign(this, { total, discount, saleStatus });
+    Object.assign(this, { saleStatus });
   }
 }
