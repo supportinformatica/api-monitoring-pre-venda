@@ -1,9 +1,11 @@
 export interface SaleTimeLine {
-  id: number;
-  total: number;
   time: string;
   lat: string;
   long: string;
+  sale?: {
+    id: number;
+    total: number;
+  };
 }
 
 export interface TimeLine {
