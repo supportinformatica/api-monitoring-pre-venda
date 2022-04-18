@@ -6,3 +6,4 @@ export * from './sale-product';
 export * from './seller';
 export * from './seller-customer';
 export * from './store';
+export * from './check-in';

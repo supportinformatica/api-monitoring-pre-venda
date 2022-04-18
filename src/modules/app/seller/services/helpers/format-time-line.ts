@@ -1,6 +1,6 @@
 import { getSum } from '@src/modules/common/helpers';
 import { DistanceService } from '@src/modules/common/services/distance-service';
-import { ISale } from '@src/modules/database/interfaces';
+import { CheckIn } from '@src/modules/database/models';
 import { SaleTimeLine, TimeLine } from '../../interfaces/time-line';
 
 function getLabelDistance(total: number): string {
@@ -43,8 +43,8 @@ async function getDistance(sales: SaleTimeLine[]) {
   return getLabelDistance(getSum(await Promise.all(promises)));
 }
 
-function formatSales(sales: ISale[]): SaleTimeLine[] {
-  return sales.map(({ id, customer, total, createdAt, lat, long }) => {
+function formatSales(checkIn: CheckIn[]): SaleTimeLine[] {
+  return checkIn.map(({ customer, sale: { total, id }, createdAt, lat, long }) => {
     const [time] = new Date(createdAt).toTimeString().split(' ');
 
     return {
@@ -58,7 +58,7 @@ function formatSales(sales: ISale[]): SaleTimeLine[] {
   });
 }
 
-export async function formatTimeLine(data: ISale[]): Promise<TimeLine> {
+export async function formatTimeLine(data: CheckIn[]): Promise<TimeLine> {
   const sales = formatSales(data);
   const total = getTotal(sales);
   const distance = await getDistance(sales);

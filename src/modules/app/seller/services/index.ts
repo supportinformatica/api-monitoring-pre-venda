@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ISale, ISeller } from '@src/modules/database/interfaces';
 import { left, right } from '@src/shared/either';
+import { CustomCheckInRepository } from '../../check-in/repositories';
 import { CustomSaleRepository } from '../../sale/repositories';
 import { ISellerAndInfo } from '../interfaces/seller-and-info';
 import { Settings } from '../interfaces/settings';
@@ -20,7 +21,8 @@ import { formatTimeLine } from './helpers/format-time-line';
 export class SellerService implements SellerServiceDTO {
   constructor(
     private readonly repository: CustomSellerRepository,
-    private readonly saleRepository: CustomSaleRepository
+    private readonly saleRepository: CustomSaleRepository,
+    private readonly checkInRepository: CustomCheckInRepository
   ) {}
 
   public async changeMaxDiscount(
@@ -96,7 +98,7 @@ export class SellerService implements SellerServiceDTO {
     const from = new Date(`${usDate} 00:00:00`).toISOString();
     const to = new Date().toISOString();
 
-    return formatTimeLine(await this.saleRepository.findTimeLine(storeId, id, from, to));
+    return formatTimeLine(await this.checkInRepository.findTimeLine(storeId, id, from, to));
   }
 
   public async findSettings(id: number, storeId: number): Promise<FindSettings> {
