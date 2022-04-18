@@ -12,7 +12,13 @@ function getLabelDistance(total: number): string {
 }
 
 function getTotal(sales: SaleTimeLine[]): number {
-  return getSum(sales.map(({ total }) => total));
+  return getSum(
+    sales.map(({ sale }) => {
+      if (!sale) return 0;
+
+      return sale.total;
+    })
+  );
 }
 
 async function getDistance(sales: SaleTimeLine[]) {
@@ -44,13 +50,13 @@ async function getDistance(sales: SaleTimeLine[]) {
 }
 
 function formatSales(checkIn: CheckIn[]): SaleTimeLine[] {
-  return checkIn.map(({ customer, sale: { total, id }, createdAt, lat, long }) => {
+  return checkIn.map(({ customer, sale: _sale, createdAt, lat, long }) => {
     const [time] = new Date(createdAt).toTimeString().split(' ');
+    const sale = _sale ? { id: _sale.id, total: _sale.total } : undefined;
 
     return {
-      id,
+      sale,
       customer,
-      total,
       lat,
       long,
       time
