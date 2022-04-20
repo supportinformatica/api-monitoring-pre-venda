@@ -21,8 +21,10 @@ export class DistanceService implements DistanceServiceDTO {
 
     const { data } = await externalDistance.get<ExternalDistance>(url);
 
-    const { value } = data.rows[0].elements[0].distance;
+    const { status } = data.rows[0].elements[0];
 
-    return value;
+    if (status !== 'OK') return 0;
+
+    return data.rows[0].elements[0].distance.value;
   }
 }
