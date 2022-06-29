@@ -19,7 +19,7 @@ import { StoreService } from './services';
     SaleModule,
     GraphicModule
   ],
-  exports: [StoreService],
+  exports: [CustomStoreRepository, StoreService],
   controllers: [StoreController],
   providers: [CustomStoreRepository, StoreService]
 })

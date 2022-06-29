@@ -15,4 +15,8 @@ export class CustomStoreRepository implements StoreRepositoryDTO {
       .andWhere('Store.storeId = :storeId', { storeId })
       .getOne();
   }
+
+  public findAll() {
+    return this.repository.createQueryBuilder().getMany();
+  }
 }
