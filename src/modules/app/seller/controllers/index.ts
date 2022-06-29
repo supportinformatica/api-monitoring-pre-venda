@@ -158,8 +158,12 @@ export class SellerController {
   }
 
   @Get(':id/time-line')
-  public async findTimeLine(@Param('id', ParseIntPipe) id: number, @StoreId() storeId: number) {
-    return this.service.findTimeLine(id, storeId);
+  public async findTimeLine(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() query: { date: string },
+    @StoreId() storeId: number
+  ) {
+    return this.service.findTimeLine(id, query.date, storeId);
   }
 
   @Get(':id/settings')

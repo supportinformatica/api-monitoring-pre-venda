@@ -92,11 +92,10 @@ export class SellerService implements SellerServiceDTO {
     };
   }
 
-  public async findTimeLine(id: number, storeId: number): Promise<TimeLine> {
-    const [usDate] = new Date().toISOString().split('T');
-
-    const from = new Date(`${usDate} 00:00:00`).toISOString();
-    const to = new Date().toISOString();
+  public async findTimeLine(id: number, date: string, storeId: number): Promise<TimeLine> {
+    const [usDate] = date.split('T');
+    const from = `${usDate}T01:00:00.000Z`;
+    const to = `${usDate}T23:59:00.000Z`;
 
     return formatTimeLine(await this.checkInRepository.findTimeLine(storeId, id, from, to));
   }

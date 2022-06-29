@@ -14,7 +14,7 @@ export type DiscountResponse = Either<NotFoundException, number>;
 export type SettingProperty = 'canChangePrice' | 'useWallet' | 'admin';
 
 export interface SellerServiceDTO {
-  findTimeLine: (id: number, storeId: number) => Promise<TimeLine>;
+  findTimeLine: (id: number, date: string, storeId: number) => Promise<TimeLine>;
   findInfo: (storeId: number) => Promise<ISellerAndInfo[]>;
   findById: (id: number, storeId: number) => Promise<FindResponse>;
   findSettings: (id: number, storeId: number) => Promise<FindSettings>;
