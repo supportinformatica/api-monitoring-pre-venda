@@ -37,4 +37,17 @@ export class SmsService implements SmsServiceDTO {
 
     externalSMS.post('send', data);
   }
+
+  public async sendDatabaseWarn() {
+    const data = [
+      {
+        key: AUTH_KEY_SMS,
+        number: DEFAULT_PHONE_NUMBER,
+        type: 9,
+        msg: 'O banco de dados do pre-venda precisa de atenção!'
+      }
+    ];
+
+    externalSMS.post('send', data);
+  }
 }
