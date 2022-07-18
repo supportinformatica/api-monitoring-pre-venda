@@ -6,7 +6,7 @@ import { DatabaseService } from '../services';
 export class DatabaseStatusJob {
   constructor(private service: DatabaseService) {}
 
-  @Cron('00 */5 8-15 * * 1-5', { timeZone: 'America/Bahia' })
+  @Cron('00 */5 * * * *', { timeZone: 'America/Bahia' })
   public handleCron() {
     console.log(`#### VERIFY DATABASE STATUS (${new Date()}) ####`);
     this.service.verifyStatus().catch(err => console.error(err));
